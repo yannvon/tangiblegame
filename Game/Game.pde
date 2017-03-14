@@ -8,7 +8,9 @@ float speed = 0.02;
 final float INCREMENT = 0.1;
 final float SPEED_START = speed;
 final float MAX_ANGLE = PI/3;
-final float PLATE_SIZE_Z = 20;
+final float PLATE_SIZE_X = 500;
+final float PLATE_SIZE_Y = 20;
+final float PLATE_SIZE_Z = 500;
 Mover ball;
 void settings() {
   //size(500, 500, P3D);
@@ -35,9 +37,10 @@ void draw() {
   translate(width/2, height/2, 0); 
   rotateX(angleX);
   rotateZ(angleZ);
-  box(500, PLATE_SIZE_Z, 500);
-  translate(0, PLATE_SIZE_Z/2, 0);
+  box(500, PLATE_SIZE_Y, 500);
+  translate(0, -PLATE_SIZE_Y/2, 0);
   ball.update(angleZ, angleX);
+  ball.checkEdges(PLATE_SIZE_X, PLATE_SIZE_Z);
   ball.display();
   popMatrix();
 }
