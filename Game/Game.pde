@@ -11,8 +11,8 @@ final int OBJECT_COLOR = 0xFF008080;
 final int PLATE_COLOR  = 0xFF40E0D0;
 
 // --- Shapes ---
-final float cylinderBaseSize = 50;
-final float cylinderHeight = 50;
+final float cylinderBaseSize = 30;
+final float cylinderHeight = 30;
 final int cylinderResolution = 40;
 PShape openCylinder = new PShape();
 PShape side = new PShape();
@@ -88,7 +88,7 @@ void mouseDragged()
 }
 
 void mouseClicked() {
-  if (shiftDown)addObstacle();
+  if (shiftDown) addObstacle();
 }
 void mouseWheel(MouseEvent event) {
   float count = event.getCount();
@@ -115,14 +115,14 @@ void loadShapes() {
   float angle;
   float[] x = new float[cylinderResolution + 1];
   float[] y = new float[cylinderResolution + 1];
-  
+
   //get the x and y position on a circle for all the sides
   for (int i = 0; i < x.length; i++) {
     angle = (TWO_PI / cylinderResolution) * i;
     x[i] = sin(angle) * cylinderBaseSize;
     y[i] = cos(angle) * cylinderBaseSize;
   }
-  
+
   //draw the border of the cylinder  
   openCylinder = createShape();
   openCylinder.beginShape(QUAD_STRIP);
@@ -132,7 +132,7 @@ void loadShapes() {
   }
   openCylinder.endShape();
   openCylinder.setFill(OBJECT_COLOR);
-  
+
   //draw top/bottom of cylinder
   side = createShape();
   side.beginShape(TRIANGLE);
@@ -147,7 +147,9 @@ void loadShapes() {
 }
 
 void addObstacle() {
-  obstaclePositions.add(new PVector(mouseX, mouseY, 0));
+  PVector currentPos = new PVector(mouseX, mouseY, 0);
+  if (validPosition(currentPos))
+    obstaclePositions.add(currentPos);
 }
 void drawObstacles() {
   for (PVector p : obstaclePositions) {
@@ -164,4 +166,17 @@ void cylinderAt(PVector position) {
   translate(0, 0, cylinderHeight);
   shape(side);
   popMatrix();
+}
+
+boolean validPosition(PVector position) {
+  return true;
+  //1) check inside plate   //<>//
+  //if (position.x > height/2 + PLATE_SIZE_X/2 || position.x < height/2 -PLATE_SIZE_X/2) {
+  //  return false;
+  //}
+  //if (position.z > width/2 + PLATE_SIZE_Z/2 || position.z < width/2 -PLATE_SIZE_Z/2) {
+  //  return false;
+  //}
+  // 2) check not too close to ball
+  //return (position.dist(ball.location) < (RADIUS + cylinderBaseSize));
 }
