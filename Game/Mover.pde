@@ -2,8 +2,9 @@
 final float GRAVITY_CONSTANT = 0.2;
 final float normalForce = 1;
 final float mu = 0.01;
-final float RADIUS = 50;
-final float BOUNCING_FACTOR = 0.98;  //FIXME remove!
+final float RADIUS = 30;
+final float BOUNCING_FACTOR = 0.98;  //FIXME remove?
+final int MOVER_COLOR = 0xFF778899;
 
 class Mover {
   // --- Attributes ---
@@ -36,6 +37,7 @@ class Mover {
     pushMatrix();
     translate(location.x, location.y, location.z);
     translate(0, -RADIUS, 0);
+    fill(MOVER_COLOR);
     sphere(RADIUS);
     popMatrix();
   }

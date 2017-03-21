@@ -7,11 +7,13 @@ final float MAX_ANGLE = PI/3;
 final float PLATE_SIZE_X = 500;
 final float PLATE_SIZE_Y = 20;
 final float PLATE_SIZE_Z = 500;
+final int OBJECT_COLOR = 0xFF008080;
+final int PLATE_COLOR  = 0xFF40E0D0;
 
 // --- Shapes ---
-float cylinderBaseSize = 50;
-float cylinderHeight = 50;
-int cylinderResolution = 40;
+final float cylinderBaseSize = 50;
+final float cylinderHeight = 50;
+final int cylinderResolution = 40;
 PShape openCylinder = new PShape();
 PShape side = new PShape();
 
@@ -38,9 +40,8 @@ void draw() {
   if (!shiftDown) {
     // --- Camera & Light settings ---
     //FIXME: Is standard camera good enough?
-    directionalLight(50, 100, 125, 0.3, 0.7, 0);  //Light from left/above
+    directionalLight(255, 255, 255, 0.3, 0.7, 0);
     ambientLight(102, 102, 102);
-
 
     // --- Display control info ---
     String s = String.format("RotationX: %.7g  RotationZ = %.7g  Speed = %.2g", degrees(angleX), degrees(angleZ), speed/SPEED_START);
@@ -50,7 +51,8 @@ void draw() {
     translate(width/2, height/2, 0); 
     rotateX(angleX);
     rotateZ(angleZ);
-    box(500, PLATE_SIZE_Y, 500);
+    fill(PLATE_COLOR);
+    box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z);
     translate(0, -PLATE_SIZE_Y/2, 0);
     ball.update(angleZ, angleX);
     ball.checkEdges(PLATE_SIZE_X, PLATE_SIZE_Z);
@@ -58,9 +60,10 @@ void draw() {
   } else {
     translate(width/2, height/2, 0);
     rotateX(-PI/2);
-    directionalLight(50, 100, 125, 0.3, 0.7, 0);  //Light from left/above
+    directionalLight(255, 255, 255, 0.3, 0.7, 0);
     ambientLight(102, 102, 102);
-    box(500, PLATE_SIZE_Y, 500);
+    fill(PLATE_COLOR);
+    box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z);
     ball.display();
   }
   drawObstacles();
@@ -112,23 +115,27 @@ void loadShapes() {
   float angle;
   float[] x = new float[cylinderResolution + 1];
   float[] y = new float[cylinderResolution + 1];
+  
   //get the x and y position on a circle for all the sides
   for (int i = 0; i < x.length; i++) {
     angle = (TWO_PI / cylinderResolution) * i;
     x[i] = sin(angle) * cylinderBaseSize;
     y[i] = cos(angle) * cylinderBaseSize;
   }
+  
+  //draw the border of the cylinder  
   openCylinder = createShape();
   openCylinder.beginShape(QUAD_STRIP);
-  //draw the border of the cylinder
   for (int i = 0; i < x.length; i++) {
     openCylinder.vertex(x[i], y[i], 0);
     openCylinder.vertex(x[i], y[i], cylinderHeight);
   }
   openCylinder.endShape();
+  openCylinder.setFill(OBJECT_COLOR);
+  
+  //draw top/bottom of cylinder
   side = createShape();
   side.beginShape(TRIANGLE);
-  //draw the border of the cylinder
   for (int i = 0; i < x.length; i++) {
     side.vertex(x[i], y[i], 0);
     side.vertex(0, 0, 0);
@@ -136,6 +143,7 @@ void loadShapes() {
     else side.vertex(x[0], y[0], 0);
   }
   side.endShape();
+  side.setFill(OBJECT_COLOR);
 }
 
 void addObstacle() {
