@@ -61,18 +61,17 @@ class Mover {
   }
   void checkCylinderCollision (ArrayList<PVector> obstaclePositions, float obstacleRadius) {
     for (PVector obstacle : obstaclePositions) {
-      float dist = PVector.dist(new PVector(location.x, 0, location.z), new PVector(obstacle.x, 0, obstacle.y));
-      if(dist <= RADIUS + obstacleRadius){
+      float dist = PVector.dist(new PVector(location.x, 0, location.z), new PVector(obstacle.x, 0, obstacle.z));
+      if(dist < RADIUS + obstacleRadius){
         PVector normal = new PVector(location.x, 0, location.z);
-        normal.sub(new PVector(obstacle.x, 0, obstacle.y));
+        normal.sub(new PVector(obstacle.x, 0, obstacle.z));
         normal.normalize();
         PVector V1 = new PVector(velocity.x, 0, velocity.z);
-        PVector V2 = new PVector(0, 0, 0);
+        PVector V2 = new PVector();
         V2.add(V1);
-        System.out.println(V2.x);
-        normal.mult(2*V1.dot(normal));
-        V2.sub(V1);
-        velocity = V2;
+        normal.mult(-2*V1.dot(normal));
+        V2.add(normal);
+        velocity = V2.mult(BOUNCING_FACTOR);
       }
     }
   }
