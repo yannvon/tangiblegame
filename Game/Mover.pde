@@ -11,14 +11,14 @@ class Mover {
   PVector location;
   PVector velocity;
   PVector gravityForce = new PVector(0, 0);
-  
+
   // --- Consturctor ---
   Mover(PVector location) {
     this.location = location;
     velocity = new PVector(0, 0);
   }
-  
-  void update(float rotZ, float rotX) {
+
+  void update(float rotZ, float rotX, ArrayList<PVector> obstaclePositions, float obstacleRadius) {
     gravityForce.x = sin(rotZ) * GRAVITY_CONSTANT;
     gravityForce.z = -sin(rotX) * GRAVITY_CONSTANT;
 
@@ -30,9 +30,10 @@ class Mover {
 
     velocity.add(gravityForce);
     velocity.add(friction);
+    checkCylinderCollision(obstaclePositions, obstacleRadius);
     location.add(velocity);
   }
-  
+
   void display() {
     pushMatrix();
     translate(location.x, location.y, location.z);
@@ -41,23 +42,38 @@ class Mover {
     sphere(RADIUS);
     popMatrix();
   }
-  
+
   void checkEdges(float boundary_x, float boundary_z) {
     if (location.x > boundary_x/2) {
       location.x = boundary_x/2;
       velocity.x = velocity.x * -1 * BOUNCING_FACTOR;
-    }
-    else if(location.x < - boundary_x/2){
+    } else if (location.x < - boundary_x/2) {
       location.x = - boundary_x/2;
       velocity.x = velocity.x * -1 * BOUNCING_FACTOR;
     }
     if (location.z > boundary_z/2) {
       location.z = boundary_z/2;
       velocity.z = velocity.z * -1 * BOUNCING_FACTOR;
-    }
-    else if (location.z < -boundary_z/2){
+    } else if (location.z < -boundary_z/2) {
       location.z = - boundary_x/2;
       velocity.z = velocity.z * -1 * BOUNCING_FACTOR;
+    }
+  }
+  void checkCylinderCollision (ArrayList<PVector> obstaclePositions, float obstacleRadius) {
+    for (PVector obstacle : obstaclePositions) {
+      float dist = PVector.dist(new PVector(location.x, 0, location.z), new PVector(obstacle.x, 0, obstacle.y));
+      if(dist <= RADIUS + obstacleRadius){
+        PVector normal = new PVector(location.x, 0, location.z);
+        normal.sub(new PVector(obstacle.x, 0, obstacle.y));
+        normal.normalize();
+        PVector V1 = new PVector(velocity.x, 0, velocity.z);
+        PVector V2 = new PVector(0, 0, 0);
+        V2.add(V1);
+        System.out.println(V2.x);
+        normal.mult(2*V1.dot(normal));
+        V2.sub(V1);
+        velocity = V2;
+      }
     }
   }
 }

@@ -54,9 +54,10 @@ void draw() {
     fill(PLATE_COLOR);
     box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z);
     translate(0, -PLATE_SIZE_Y/2, 0);
-    ball.update(angleZ, angleX);
+    ball.update(angleZ, angleX, obstaclePositions, cylinderBaseSize);
     ball.checkEdges(PLATE_SIZE_X, PLATE_SIZE_Z);
     ball.display();
+    drawObstacles();
   } else {
     translate(width/2, height/2, 0);
     rotateX(-PI/2);
@@ -65,8 +66,9 @@ void draw() {
     fill(PLATE_COLOR);
     box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z);
     ball.display();
+    drawObstacles();
   }
-  drawObstacles();
+ 
 }
 
 void mouseDragged() 
@@ -147,7 +149,7 @@ void loadShapes() {
 }
 
 void addObstacle() {
-  obstaclePositions.add(new PVector(mouseX, mouseY, 0));
+  obstaclePositions.add(new PVector(mouseX -width/2, mouseY -height/2, 0));
 }
 void drawObstacles() {
   for (PVector p : obstaclePositions) {
@@ -156,7 +158,7 @@ void drawObstacles() {
 }
 void cylinderAt(PVector position) {
   pushMatrix();
-  translate(-width/2, 0, -height/2); 
+  //translate(-width/2, 0, -height/2); 
   translate(position.x, 0, position.y);
   rotateX(PI/2);
   shape(openCylinder);
