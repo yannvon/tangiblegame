@@ -8,6 +8,7 @@ final float PLATE_SIZE_X = 500;
 final float PLATE_SIZE_Y = 20;
 final float PLATE_SIZE_Z = 500;
 final int OBJECT_COLOR = 0xFF008080;
+final int COLOR_RED = 0xFFFF0000;
 final int PLATE_COLOR  = 0xFF40E0D0;
 
 // --- Shapes ---
@@ -24,6 +25,7 @@ float angleX = 0;
 float angleZ = 0;
 float speed = SPEED_START;
 ArrayList<PVector> obstaclePositions = new ArrayList<PVector>();
+PVector nonAuthorizedObstacle = null;
 Mover ball;
 
 
@@ -54,9 +56,10 @@ void draw() {
     fill(PLATE_COLOR);
     box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z);
     translate(0, -PLATE_SIZE_Y/2, 0);
-    ball.update(angleZ, angleX);
+    ball.update(angleZ, angleX, obstaclePositions, cylinderBaseSize);
     ball.checkEdges(PLATE_SIZE_X, PLATE_SIZE_Z);
     ball.display();
+    drawObstacles();
   } else {
     translate(width/2, height/2, 0);
     rotateX(-PI/2);
@@ -65,8 +68,9 @@ void draw() {
     fill(PLATE_COLOR);
     box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z);
     ball.display();
+    drawObstacles();
+    drawObstacleUnderMouse();
   }
-  drawObstacles();
 }
 
 void mouseDragged() 
@@ -147,10 +151,20 @@ void loadShapes() {
 }
 
 void addObstacle() {
-  PVector currentPos = new PVector(mouseX, mouseY, 0);
-  if (validPosition(currentPos))
-    obstaclePositions.add(currentPos);
+  PVector position = new PVector(mouseX - width/2, 0, mouseY - height/2);
+  if (isObstaclePositionAuthorized(position))obstaclePositions.add(position);
 }
+
+boolean isObstaclePositionAuthorized(PVector position) {
+  boolean authorized = true;
+  nonAuthorizedObstacle = null;
+  for (PVector obstacle : obstaclePositions) {
+    if (PVector.dist(obstacle, position) < 2 * cylinderBaseSize)authorized =false;
+  }
+  if(PVector.dist(ball.location, position) < cylinderBaseSize + RADIUS)authorized = false;
+  return authorized;
+}
+
 void drawObstacles() {
   for (PVector p : obstaclePositions) {
     cylinderAt(p);
@@ -158,8 +172,7 @@ void drawObstacles() {
 }
 void cylinderAt(PVector position) {
   pushMatrix();
-  translate(-width/2, 0, -height/2); 
-  translate(position.x, 0, position.y);
+  translate(position.x, 0, position.z);
   rotateX(PI/2);
   shape(openCylinder);
   shape(side);
@@ -168,15 +181,13 @@ void cylinderAt(PVector position) {
   popMatrix();
 }
 
-boolean validPosition(PVector position) {
-  return true;
-  //1) check inside plate   //<>//
-  //if (position.x > height/2 + PLATE_SIZE_X/2 || position.x < height/2 -PLATE_SIZE_X/2) {
-  //  return false;
-  //}
-  //if (position.z > width/2 + PLATE_SIZE_Z/2 || position.z < width/2 -PLATE_SIZE_Z/2) {
-  //  return false;
-  //}
-  // 2) check not too close to ball
-  //return (position.dist(ball.location) < (RADIUS + cylinderBaseSize));
+void drawObstacleUnderMouse() {
+  PVector position = new PVector(mouseX - width/2, 0, mouseY - height/2);
+  if (!isObstaclePositionAuthorized(position)) {
+    side.setFill(COLOR_RED);
+    openCylinder.setFill(COLOR_RED);
+  }
+  cylinderAt(position);
+  side.setFill(OBJECT_COLOR);
+  openCylinder.setFill(OBJECT_COLOR);
 }
