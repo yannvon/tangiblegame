@@ -39,32 +39,35 @@ void setup() {
 }
 void draw() {
   background(240);
+  // --- Camera & Light settings ---
+  directionalLight(255, 255, 255, 0.3, 0.7, 0);
+  ambientLight(102, 102, 102);
+    
   if (!shiftDown) {
-    // --- Camera & Light settings ---
-    //FIXME: Is standard camera good enough?
-    directionalLight(255, 255, 255, 0.3, 0.7, 0);
-    ambientLight(102, 102, 102);
-
     // --- Display control info ---
     String s = String.format("RotationX: %.7g  RotationZ = %.7g  Speed = %.2g", degrees(angleX), degrees(angleZ), speed/SPEED_START);
     text(s, 10, 20);
 
-    //-- Drawing the plate (angle and speed given by user) --
+    //-- Drawing the plate (angle and speed given by user) ---
     translate(width/2, height/2, 0); 
     rotateX(angleX);
     rotateZ(angleZ);
     fill(PLATE_COLOR);
     box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z);
+    
+    // --- Updating and drawing the ball ---
     translate(0, -PLATE_SIZE_Y/2, 0);
     ball.update(angleZ, angleX, obstaclePositions, cylinderBaseSize);
     ball.checkEdges(PLATE_SIZE_X, PLATE_SIZE_Z);
     ball.display();
+    
+    // --- Drawing obstacles added by user ---
     drawObstacles();
+    
   } else {
+    // --- Object adding mode ---
     translate(width/2, height/2, 0);
     rotateX(-PI/2);
-    directionalLight(255, 255, 255, 0.3, 0.7, 0);
-    ambientLight(102, 102, 102);
     fill(PLATE_COLOR);
     box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z);
     ball.display();
@@ -127,7 +130,7 @@ void loadShapes() {
     y[i] = cos(angle) * cylinderBaseSize;
   }
 
-  //draw the border of the cylinder  
+  // draw the border of the cylinder  
   openCylinder = createShape();
   openCylinder.beginShape(QUAD_STRIP);
   for (int i = 0; i < x.length; i++) {
@@ -137,7 +140,7 @@ void loadShapes() {
   openCylinder.endShape();
   openCylinder.setFill(OBJECT_COLOR);
 
-  //draw top/bottom of cylinder
+  // draw top/bottom of cylinder
   side = createShape();
   side.beginShape(TRIANGLE);
   for (int i = 0; i < x.length; i++) {
@@ -152,16 +155,18 @@ void loadShapes() {
 
 void addObstacle() {
   PVector position = new PVector(mouseX - width/2, 0, mouseY - height/2);
-  if (isObstaclePositionAuthorized(position))obstaclePositions.add(position);
+  if (isObstaclePositionAuthorized(position)) obstaclePositions.add(position);
 }
 
 boolean isObstaclePositionAuthorized(PVector position) {
+  // FIXME : vairable authorized not really needed
   boolean authorized = true;
   nonAuthorizedObstacle = null;
   for (PVector obstacle : obstaclePositions) {
-    if (PVector.dist(obstacle, position) < 2 * cylinderBaseSize)authorized =false;
+    if (PVector.dist(obstacle, position) < 2 * cylinderBaseSize) authorized =false;
   }
-  if(PVector.dist(ball.location, position) < cylinderBaseSize + RADIUS)authorized = false;
+  if(!positionInsidePlate(position)) authorized = false;
+  if(PVector.dist(ball.location, position) < cylinderBaseSize + RADIUS) authorized = false;
   return authorized;
 }
 
@@ -190,4 +195,11 @@ void drawObstacleUnderMouse() {
   cylinderAt(position);
   side.setFill(OBJECT_COLOR);
   openCylinder.setFill(OBJECT_COLOR);
+}
+
+boolean positionInsidePlate(PVector position) {
+  return ( position.x <= PLATE_SIZE_X/2 && 
+           position.x >= - PLATE_SIZE_X/2 &&
+           position.z <= PLATE_SIZE_Z/2 && 
+           position.z >= -PLATE_SIZE_Z/2 );
 }
