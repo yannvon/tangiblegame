@@ -9,6 +9,7 @@ final float PLATE_SIZE_Y = 20;
 final float PLATE_SIZE_Z = 500;
 final int OBJECT_COLOR = 0xFF008080;
 final int COLOR_RED = 0xFFFF0000;
+final int COLOR_GREEN = 0xFF008000;
 final int PLATE_COLOR  = 0xFF40E0D0;
 
 // --- Shapes ---
@@ -25,7 +26,6 @@ float angleX = 0;
 float angleZ = 0;
 float speed = SPEED_START;
 ArrayList<PVector> obstaclePositions = new ArrayList<PVector>();
-PVector nonAuthorizedObstacle = null;
 Mover ball;
 
 
@@ -157,11 +157,11 @@ void addObstacle() {
 
 boolean isObstaclePositionAuthorized(PVector position) {
   boolean authorized = true;
-  nonAuthorizedObstacle = null;
   for (PVector obstacle : obstaclePositions) {
     if (PVector.dist(obstacle, position) < 2 * cylinderBaseSize)authorized =false;
   }
   if(PVector.dist(ball.location, position) < cylinderBaseSize + RADIUS)authorized = false;
+  else if(position.x > PLATE_SIZE_X/2 || position.x < -PLATE_SIZE_X/2 || position.z > PLATE_SIZE_Z/2 || position.z < -PLATE_SIZE_Z/2 )authorized = false;
   return authorized;
 }
 
@@ -186,6 +186,9 @@ void drawObstacleUnderMouse() {
   if (!isObstaclePositionAuthorized(position)) {
     side.setFill(COLOR_RED);
     openCylinder.setFill(COLOR_RED);
+  }else{
+    side.setFill(COLOR_GREEN);
+    openCylinder.setFill(COLOR_GREEN);
   }
   cylinderAt(position);
   side.setFill(OBJECT_COLOR);
