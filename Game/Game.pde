@@ -12,13 +12,6 @@ final int COLOR_RED = 0xFFFF0000;
 final int COLOR_GREEN = 0xFF008000;
 final int PLATE_COLOR  = 0xFF40E0D0;
 
-// --- Shapes ---
-final float cylinderBaseSize = 30;
-final float cylinderHeight = 30;
-final int cylinderResolution = 40;
-PShape openCylinder = new PShape();
-PShape side = new PShape();
-
 // --- Variables ---
 boolean shiftDown = false;
 float depth = 200;
@@ -34,7 +27,7 @@ void settings() {
 }
 void setup() {
   noStroke();
-  loadShapes();
+  loadCylinder();
   ball = new Mover(new PVector(0, 0, 0));
 }
 void draw() {
@@ -42,7 +35,7 @@ void draw() {
   // --- Camera & Light settings ---
   directionalLight(255, 255, 255, 0.3, 0.7, 0);
   ambientLight(102, 102, 102);
-    
+
   if (!shiftDown) {
     // --- Display control info ---
     String s = String.format("RotationX: %.7g  RotationZ = %.7g  Speed = %.2g", degrees(angleX), degrees(angleZ), speed/SPEED_START);
@@ -54,16 +47,15 @@ void draw() {
     rotateZ(angleZ);
     fill(PLATE_COLOR);
     box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z);
-    
+
     // --- Updating and drawing the ball ---
     translate(0, -PLATE_SIZE_Y/2, 0);
     ball.update(angleZ, angleX, obstaclePositions, cylinderBaseSize);
     ball.checkEdges(PLATE_SIZE_X, PLATE_SIZE_Z);
     ball.display();
-    
+
     // --- Drawing obstacles added by user ---
     drawObstacles();
-    
   } else {
     // --- Object adding mode ---
     translate(width/2, height/2, 0);
@@ -118,40 +110,6 @@ void keyReleased() {
     shiftDown = false;
   }
 }
-void loadShapes() {
-  float angle;
-  float[] x = new float[cylinderResolution + 1];
-  float[] y = new float[cylinderResolution + 1];
-
-  //get the x and y position on a circle for all the sides
-  for (int i = 0; i < x.length; i++) {
-    angle = (TWO_PI / cylinderResolution) * i;
-    x[i] = sin(angle) * cylinderBaseSize;
-    y[i] = cos(angle) * cylinderBaseSize;
-  }
-
-  // draw the border of the cylinder  
-  openCylinder = createShape();
-  openCylinder.beginShape(QUAD_STRIP);
-  for (int i = 0; i < x.length; i++) {
-    openCylinder.vertex(x[i], y[i], 0);
-    openCylinder.vertex(x[i], y[i], cylinderHeight);
-  }
-  openCylinder.endShape();
-  openCylinder.setFill(OBJECT_COLOR);
-
-  // draw top/bottom of cylinder
-  side = createShape();
-  side.beginShape(TRIANGLE);
-  for (int i = 0; i < x.length; i++) {
-    side.vertex(x[i], y[i], 0);
-    side.vertex(0, 0, 0);
-    if (i!=x.length-1)side.vertex(x[i+1], y[i+1], 0);
-    else side.vertex(x[0], y[0], 0);
-  }
-  side.endShape();
-  side.setFill(OBJECT_COLOR);
-}
 
 void addObstacle() {
   PVector position = new PVector(mouseX - width/2, 0, mouseY - height/2);
@@ -165,8 +123,8 @@ boolean isObstaclePositionAuthorized(PVector position) {
     if (PVector.dist(obstacle, position) < 2 * cylinderBaseSize) authorized =false;
   }
 
-  if(PVector.dist(ball.location, position) < cylinderBaseSize + RADIUS)authorized = false;
-  else if(position.x > PLATE_SIZE_X/2 || position.x < -PLATE_SIZE_X/2 || position.z > PLATE_SIZE_Z/2 || position.z < -PLATE_SIZE_Z/2 )authorized = false;
+  if (PVector.dist(ball.location, position) < cylinderBaseSize + RADIUS)authorized = false;
+  else if (position.x > PLATE_SIZE_X/2 || position.x < -PLATE_SIZE_X/2 || position.z > PLATE_SIZE_Z/2 || position.z < -PLATE_SIZE_Z/2 )authorized = false;
   return authorized;
 }
 
@@ -175,34 +133,22 @@ void drawObstacles() {
     cylinderAt(p);
   }
 }
-void cylinderAt(PVector position) {
-  pushMatrix();
-  translate(position.x, 0, position.z);
-  rotateX(PI/2);
-  shape(openCylinder);
-  shape(side);
-  translate(0, 0, cylinderHeight);
-  shape(side);
-  popMatrix();
-}
+
 
 void drawObstacleUnderMouse() {
   PVector position = new PVector(mouseX - width/2, 0, mouseY - height/2);
   if (!isObstaclePositionAuthorized(position)) {
-    side.setFill(COLOR_RED);
-    openCylinder.setFill(COLOR_RED);
-  }else{
-    side.setFill(COLOR_GREEN);
-    openCylinder.setFill(COLOR_GREEN);
+    setCylinderColor(COLOR_RED);
+  } else {
+    setCylinderColor(COLOR_GREEN);
   }
   cylinderAt(position);
-  side.setFill(OBJECT_COLOR);
-  openCylinder.setFill(OBJECT_COLOR);
+  setCylinderColor(OBJECT_COLOR);
 }
 
 boolean positionInsidePlate(PVector position) {
   return ( position.x <= PLATE_SIZE_X/2 && 
-           position.x >= - PLATE_SIZE_X/2 &&
-           position.z <= PLATE_SIZE_Z/2 && 
-           position.z >= -PLATE_SIZE_Z/2 );
+    position.x >= - PLATE_SIZE_X/2 &&
+    position.z <= PLATE_SIZE_Z/2 && 
+    position.z >= -PLATE_SIZE_Z/2 );
 }
