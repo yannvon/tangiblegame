@@ -1,11 +1,11 @@
-//Constants for the Cylinders
+// --- CONSTANTS ---
 final float cylinderBaseSize = 30;
 final float cylinderHeight = 30;
 final int cylinderResolution = 40;
 PShape openCylinder = new PShape();
 PShape side = new PShape();
 
-//Method that load the a Cylinder at the beginning of the game
+//Method that loads a Cylinder at the beginning of the game
 void loadCylinder() {
   float angle;
   float[] x = new float[cylinderResolution + 1];

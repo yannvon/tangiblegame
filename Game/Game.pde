@@ -117,15 +117,12 @@ void addObstacle() {
 }
 
 boolean isObstaclePositionAuthorized(PVector position) {
-  // FIXME : vairable authorized not really needed
-  boolean authorized = true;
   for (PVector obstacle : obstaclePositions) {
-    if (PVector.dist(obstacle, position) < 2 * cylinderBaseSize) authorized =false;
+    if (PVector.dist(obstacle, position) < 2 * cylinderBaseSize) return false;
   }
-
-  if (PVector.dist(ball.location, position) < cylinderBaseSize + RADIUS)authorized = false;
-  else if (position.x > PLATE_SIZE_X/2 || position.x < -PLATE_SIZE_X/2 || position.z > PLATE_SIZE_Z/2 || position.z < -PLATE_SIZE_Z/2 )authorized = false;
-  return authorized;
+  if (PVector.dist(ball.location, position) < cylinderBaseSize + RADIUS) return false;
+  else if (!positionInsidePlate(position)) return false;
+  return true;
 }
 
 void drawObstacles() {
@@ -133,7 +130,6 @@ void drawObstacles() {
     cylinderAt(p);
   }
 }
-
 
 void drawObstacleUnderMouse() {
   PVector position = new PVector(mouseX - width/2, 0, mouseY - height/2);

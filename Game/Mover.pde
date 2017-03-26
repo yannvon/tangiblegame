@@ -63,6 +63,12 @@ class Mover {
     for (PVector obstacle : obstaclePositions) {
       float dist = PVector.dist(new PVector(location.x, 0, location.z), new PVector(obstacle.x, 0, obstacle.z));
       if(dist < RADIUS + obstacleRadius){
+        // --- set position outside object to avoid bugs ---
+        //TODO: finetuning something like velocity.normalize.mult(distance to border)
+        //for the moment this works I think
+        location.sub(velocity);
+        
+        // --- handle velocity change ---
         PVector normal = new PVector(location.x, 0, location.z);
         normal.sub(new PVector(obstacle.x, 0, obstacle.z));
         normal.normalize();
