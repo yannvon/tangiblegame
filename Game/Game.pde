@@ -1,6 +1,6 @@
 // --- CONSTANTS ---
 final float INCREMENT = 0.01;
-final float SPEED_START = 0.025;
+final float SPEED_START = 0.045;
 final float MAX_SPEED = 0.15;
 final float MIN_SPEED = 0.005;
 final float MAX_ANGLE = PI/3;

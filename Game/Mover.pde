@@ -3,7 +3,7 @@ final float GRAVITY_CONSTANT = 0.2;
 final float normalForce = 1;
 final float mu = 0.01;
 final float RADIUS = 30;
-final float BOUNCING_FACTOR = 0.98;  //FIXME remove?
+final float BOUNCING_FACTOR = 0.98;  //FIXME
 final int MOVER_COLOR = 0xFF778899;
 
 class Mover {
@@ -66,7 +66,7 @@ class Mover {
         // --- set position outside object to avoid bugs ---
         //TODO: finetuning something like velocity.normalize.mult(distance to border)
         //for the moment this works I think
-        location.sub(velocity);
+        PVector newLoc = location.copy().sub(velocity);  //doesn't actually work, ask assistant how to do it..
         
         // --- handle velocity change ---
         PVector normal = new PVector(location.x, 0, location.z);
@@ -78,6 +78,8 @@ class Mover {
         normal.mult(-2*V1.dot(normal));
         V2.add(normal);
         velocity = V2.mult(BOUNCING_FACTOR);
+        
+        location = newLoc;
       }
     }
   }
