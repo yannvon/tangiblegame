@@ -24,6 +24,7 @@ Mover ball;
 // --- Surfaces ---
 PGraphics data_background;
 PGraphics top_view;
+PGraphics objects;
 PGraphics ball_trace;
 PGraphics scoreboard;
 
@@ -41,6 +42,7 @@ void setup() {
   //TODO : Add method for modularity
   data_background = createGraphics(width, data_background_height, P2D);
   top_view = createGraphics(top_view_size, top_view_size, P2D);
+  objects = createGraphics(top_view_size, top_view_size, P2D);
   ball_trace = createGraphics(top_view_size, top_view_size, P2D);
   ball = new Mover(new PVector(0, 0, 0));
 }
@@ -52,6 +54,7 @@ void draw() {
   image(data_background, 0, height - data_background_height);
   image(top_view, margin, height - (top_view_size + margin));
   image(ball_trace, margin, height - (top_view_size + margin));
+  image(objects, margin, height - (top_view_size + margin));
   // --- Camera & Light settings ---
   directionalLight(255, 255, 255, 0.3, 0.7, 0);
   ambientLight(102, 102, 102);
@@ -93,19 +96,24 @@ void drawScoreBoard() {
   data_background.background(239, 236, 202);
   data_background.endDraw();
 
+  objects.beginDraw();
+  objects.pushMatrix();
+  objects.clear();
+  objects.translate(top_view_size/2, top_view_size/2); 
+  objects.scale(top_view_size / PLATE_SIZE_X);
+  objects.fill(239, 236, 202);
+  for (PVector obstacle : obstaclePositions) {
+    objects.ellipse(obstacle.x, obstacle.z, cylinderBaseSize * 2, cylinderBaseSize *2);
+  }
+  objects.fill(COLOR_RED);
+  objects.ellipse(ball.location.x, ball.location.z, RADIUS * 2, RADIUS * 2);
+  objects.popMatrix();
+  objects.endDraw();
+  
   top_view.beginDraw();
   top_view.background(5, 100, 129);
-  top_view.pushMatrix();
-  top_view.translate(top_view_size/2, top_view_size/2); 
-  top_view.scale(top_view_size / PLATE_SIZE_X);
-  top_view.fill(239, 236, 202);
-  for (PVector obstacle : obstaclePositions) {
-    top_view.ellipse(obstacle.x, obstacle.z, cylinderBaseSize * 2, cylinderBaseSize *2);
-  }
-  top_view.fill(COLOR_RED);
-  top_view.ellipse(ball.location.x, ball.location.z, RADIUS * 2, RADIUS * 2);
-  top_view.popMatrix();
   top_view.endDraw();
+  
 
   ball_trace.beginDraw();
   ball_trace.pushMatrix();
@@ -113,7 +121,7 @@ void drawScoreBoard() {
   ball_trace.scale(top_view_size / PLATE_SIZE_X);
   ball_trace.noStroke();
   ball_trace.fill(25, 120, 149);
-  ball_trace.ellipse(ball.location.x, ball.location.z, RADIUS, RADIUS);
+  ball_trace.ellipse(ball.location.x, ball.location.z, RADIUS / 2, RADIUS / 2);
   ball_trace.popMatrix();
   ball_trace.endDraw();
 }
