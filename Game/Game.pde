@@ -21,6 +21,12 @@ float speed = SPEED_START;
 ArrayList<PVector> obstaclePositions = new ArrayList<PVector>();
 Mover ball;
 
+// --- Surfaces ---
+PGraphics data_background;
+PGraphics top_view;
+int data_background_height = 200;
+int top_view_size = 160;
+int margin = (data_background_height - top_view_size)/ 2;
 
 void settings() {
   fullScreen(P3D);
@@ -28,10 +34,15 @@ void settings() {
 void setup() {
   noStroke();
   loadCylinder();
+  data_background = createGraphics(width, data_background_height, P2D);
+  top_view = createGraphics(top_view_size, top_view_size, P2D);
   ball = new Mover(new PVector(0, 0, 0));
 }
 void draw() {
   background(240);
+  drawScoreBoard();
+  image(data_background, 0, height - data_background_height);
+  image(top_view, margin, height - (top_view_size + margin));
   // --- Camera & Light settings ---
   directionalLight(255, 255, 255, 0.3, 0.7, 0);
   ambientLight(102, 102, 102);
@@ -40,13 +51,13 @@ void draw() {
     // --- Display control info ---
     String s = String.format("RotationX: %.7g  RotationZ = %.7g  Speed = %.2g", degrees(angleX), degrees(angleZ), speed/SPEED_START);
     text(s, 10, 20);
-
+    
     //-- Drawing the plate (angle and speed given by user) ---
     translate(width/2, height/2, 0); 
     rotateX(angleX);
     rotateZ(angleZ);
     fill(PLATE_COLOR);
-    box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z);
+    box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z); 
 
     // --- Updating and drawing the ball ---
     translate(0, -PLATE_SIZE_Y/2, 0);
@@ -67,6 +78,27 @@ void draw() {
     drawObstacleUnderMouse();
   }
 }
+
+void drawScoreBoard() {
+  data_background.beginDraw();
+  data_background.background(239, 236, 202);
+  data_background.endDraw();
+  
+  top_view.beginDraw();
+  top_view.background(5, 100, 129);
+  top_view.pushMatrix();
+  top_view.translate(top_view_size/2, top_view_size/2); 
+  top_view.scale(top_view_size / PLATE_SIZE_X);
+  top_view.fill(239, 236, 202);
+  for(PVector obstacle : obstaclePositions){
+     top_view.ellipse(obstacle.x, obstacle.z, cylinderBaseSize * 2, cylinderBaseSize *2);
+  }
+  top.view.fill(COLOR_RED);
+  top_view.ellipse(ball.location.x,ball.location.z, RADIUS * 2, RADIUS * 2);
+  top_view.popMatrix();
+  top_view.endDraw();
+}
+
 
 void mouseDragged() 
 {
