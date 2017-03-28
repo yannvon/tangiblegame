@@ -62,12 +62,10 @@ class Mover {
   void checkCylinderCollision (ArrayList<PVector> obstaclePositions, float obstacleRadius) {
     for (PVector obstacle : obstaclePositions) {
       float dist = PVector.dist(new PVector(location.x, 0, location.z), new PVector(obstacle.x, 0, obstacle.z));
-      if(dist < RADIUS + obstacleRadius){
+      if (dist < RADIUS + obstacleRadius) {
         // --- set position outside object to avoid bugs ---
-        //TODO: finetuning something like velocity.normalize.mult(distance to border)
-        //for the moment this works I think
-        PVector newLoc = location.copy().sub(velocity);  //doesn't actually work, ask assistant how to do it..
-        
+        location = obstacle.copy().sub(obstacle.copy().sub(location).normalize().mult(obstacleRadius + RADIUS));
+        //TODO check formula & effect correctness
         // --- handle velocity change ---
         PVector normal = new PVector(location.x, 0, location.z);
         normal.sub(new PVector(obstacle.x, 0, obstacle.z));
@@ -78,8 +76,6 @@ class Mover {
         normal.mult(-2*V1.dot(normal));
         V2.add(normal);
         velocity = V2.mult(BOUNCING_FACTOR);
-        
-        location = newLoc;
       }
     }
   }
