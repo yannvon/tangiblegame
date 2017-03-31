@@ -1,4 +1,4 @@
-// --- CONSTANTS ---
+// --- CYLINDER CONSTANTS ---
 final float cylinderBaseSize = 30;
 final float cylinderHeight = 30;
 final int cylinderResolution = 40;
