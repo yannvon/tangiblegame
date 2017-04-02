@@ -30,21 +30,22 @@ void setup() {
   //Load the Cylinder Shape and setup de surfaces
   loadCylinder();
   setupSurfaces();
-  
+
   //Create new mover and scrollbar
   ball = new Mover(new PVector(0, 0, 0));
-  hs = new HScrollbar(50, 90, 300, 20);
+  
+  //FIXME: position is hardcoded
+  hs = new HScrollbar(380, height- 80, 300, 20);
 }
 
 void draw() {
   background(240);
   drawScoreBoardSurfaces();
   displayScoreBoardSurfaces();
-  
   // --- Scroll bar ---
-  //hs.update();
-  //hs.display();
-  
+  hs.update();
+  hs.display();
+
   // --- Camera & Light settings ---
   directionalLight(255, 255, 255, 0.3, 0.7, 0);
   ambientLight(102, 102, 102);

@@ -66,7 +66,7 @@ class Mover {
     }
     // --- Adjust score if it hit ---
     if (hit) {
-      changeScore(false);
+      changeScore(false, true);
     }
   }
   
@@ -91,7 +91,7 @@ class Mover {
         velocity = V2.mult(BOUNCING_FACTOR);
         
         // --- Adapt Score ---
-        changeScore(true);
+        changeScore(true, false);
       }
     }
   }

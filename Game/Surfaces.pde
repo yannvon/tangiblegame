@@ -25,7 +25,10 @@ PGraphics barChart;
 
 // --- BAR CHART variable ---
 int count;
+int oldPos = -1;
+ArrayList<Float> scores = new ArrayList<Float>();
 int xPos;
+
 final int tiny_rect_size = 5;              //FIXME chose wisely ;)
 final int tiny_margin = 2;
 final int intervall = 30;
@@ -97,17 +100,28 @@ void drawScoreBoardSurfaces() {
   scoreboard.fill(SCOREBOARD_TEXT_COLOR);
   scoreboard.text(s, margin, margin, scoreboard.width-margin, scoreboard.height - margin);  //FIXME better values :)
   scoreboard.endDraw();
-  
-  barChart.beginDraw();
+
+
+
+  float newPos = hs.getPos();
   if (++count == intervall) {
     count = 0;
-    barChart.fill(TOPVIEW_COLOR);
-    for (int y = tiny_rect_size; y < barChart.height && y < (totalScore / scorePerRect) ; y += tiny_margin + tiny_rect_size){
-      barChart.rect(xPos, barChart.height - y, tiny_rect_size, tiny_rect_size);
-    }
-    xPos += tiny_rect_size + tiny_margin;
+    if(!scores.isEmpty() || totalScore > scorePerRect * tiny_rect_size) scores.add(totalScore);
   }
-  barChart.endDraw();
+  if (count == intervall  || oldPos != newPos) {
+    barChart.beginDraw();
+    barChart.background(BACKGROUND_COLOR);
+    xPos = 0;
+    float scale_factor = Math.max(newPos*2, 0.3);
+    for (float score : scores) {
+      barChart.fill(TOPVIEW_COLOR);
+      for (int y = tiny_rect_size; y < barChart.height && y <= (score / scorePerRect); y += tiny_margin + tiny_rect_size) {
+        barChart.rect(xPos, barChart.height - y, tiny_rect_size * scale_factor, tiny_rect_size);
+      }
+      xPos += (tiny_rect_size + tiny_margin)*scale_factor;
+    }
+    barChart.endDraw();
+  }
 }
 
 //TODO put inside method above?
