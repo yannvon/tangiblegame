@@ -1,18 +1,20 @@
 void mouseDragged() 
 {
-  if (mouseY > pmouseY && angleX > -MAX_ANGLE) {
-    angleX -= speed;
-    angleX = Math.max(angleX, -MAX_ANGLE);
-  } else if (mouseY < pmouseY && angleX < MAX_ANGLE) {
-    angleX += speed;
-    angleX = Math.min(angleX, MAX_ANGLE);
-  }
-  if (mouseX > pmouseX && angleZ < MAX_ANGLE) {
-    angleZ += speed;
-    angleZ = Math.max(angleZ, -MAX_ANGLE);
-  } else if (mouseX < pmouseX && angleZ > -MAX_ANGLE) {
-    angleZ -= speed;
-    angleZ = Math.min(angleZ, MAX_ANGLE);
+  if (mouseY < height-scoreboard.height) {
+    if (mouseY > pmouseY && angleX > -MAX_ANGLE) {
+      angleX -= speed;
+      angleX = Math.max(angleX, -MAX_ANGLE);
+    } else if (mouseY < pmouseY && angleX < MAX_ANGLE) {
+      angleX += speed;
+      angleX = Math.min(angleX, MAX_ANGLE);
+    }
+    if (mouseX > pmouseX && angleZ < MAX_ANGLE) {
+      angleZ += speed;
+      angleZ = Math.max(angleZ, -MAX_ANGLE);
+    } else if (mouseX < pmouseX && angleZ > -MAX_ANGLE) {
+      angleZ -= speed;
+      angleZ = Math.min(angleZ, MAX_ANGLE);
+    }
   }
 }
 
