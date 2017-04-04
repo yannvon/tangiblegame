@@ -4,19 +4,22 @@ void settings() {
 void setup () {
 }
 
-float scale = 0;
+float scale = 1;
 float angleX = 0;
 float angleY = 0;
 float oldMouseY = 0;
+int lengthX = 100;
+int lengthY = 150;
+int lengthZ = 300;
 
 void draw() {
   background(255, 255, 255);
   My3DPoint eye = new My3DPoint(0, 0, -5000);
   My3DPoint origin = new My3DPoint(0, 0, 0);
-  My3DBox input3DBox = new My3DBox(origin, 100, 150, 300);
+  My3DBox input3DBox = new My3DBox(origin, lengthX, lengthY, lengthZ);
   
   float[][] scaling = scaleMatrix(scale, scale, scale);
-  float[][] translate = translationMatrix(200, 200, 0);
+  float[][] translate = translationMatrix(width/2 - lengthX/2, height/2 - lengthY/2, 0);
   float[][] rotateX = rotateXMatrix(angleX);
   float[][] rotateY = rotateYMatrix(angleY);
   
@@ -26,7 +29,6 @@ void draw() {
   
   //render
   projectBox(eye, input3DBox).render();
-
   }
 
 class My2DPoint {
