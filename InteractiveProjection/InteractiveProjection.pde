@@ -5,9 +5,12 @@ void setup () {
 }
 
 float scale = 1;
+final float incRotation = 0.2;
+final float incScale = 0.1;
+final float minScale = 0.5;
+final float maxScale = 5;
 float angleX = 0;
 float angleY = 0;
-float oldMouseY = 0;
 int lengthX = 100;
 int lengthY = 150;
 int lengthZ = 300;
@@ -170,18 +173,17 @@ My3DBox transformBox(My3DBox box, float[][] transformMatrix) {
 // operate scaling
 void mouseDragged() 
 {
-  if(mouseY < oldMouseY) {
-    scale = scale - 0.1;
+  if(mouseY < pmouseY) {
+    scale = scale - incScale;
   } else {
-    scale = scale + 0.1;
+    scale = scale + incScale;
   }
-  oldMouseY = mouseY;
-  if (scale < 0.5) {
-    scale = 0.5;
+  if (scale < minScale) {
+    scale = minScale;
   }
   
-  if (scale > 5) {
-    scale = 5;
+  if (scale > maxScale) {
+    scale = maxScale;
   }
 }
 //operate x-axis
@@ -189,16 +191,16 @@ void keyPressed() {
   if (key == CODED) {
     switch(keyCode) {
       case UP: 
-      angleX += 0.2;
+      angleX += incRotation;
       break;
       case DOWN:
-      angleX -= 0.2;
+      angleX -= incRotation;
       break;
       case LEFT:
-      angleY += 0.2;
+      angleY += incRotation;
       break;
       case RIGHT:
-      angleY -= 0.2;
+      angleY -= incRotation;
       break;
     } 
   }
