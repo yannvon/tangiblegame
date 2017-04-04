@@ -27,10 +27,9 @@ PGraphics barChart;
 int count;
 int oldPos = -1;
 ArrayList<Float> scores = new ArrayList<Float>();
-int xPos;
 
-final int tiny_rect_size = 5;              //FIXME chose wisely ;)
-final int tiny_margin = 2;
+final float tiny_rect_size = 5;              //FIXME chose wisely ;)
+final float tiny_margin = 2;
 final int intervall = 30;
 final float scorePerRect = 4;
 
@@ -110,12 +109,13 @@ void drawScoreBoardSurfaces() {
   }
   if (count == intervall  || oldPos != newPos) {
     barChart.beginDraw();
-    barChart.background(BACKGROUND_COLOR);
-    xPos = 0;
-    float scale_factor = Math.max(newPos*2, 0.3);
+    barChart.background(BACKGROUND_COLOR_LIGHT);
+    barChart.noStroke();
+    float xPos = 0;
+    float scale_factor = Math.max(newPos*4, 0.3);
     for (float score : scores) {
       barChart.fill(TOPVIEW_COLOR);
-      for (int y = tiny_rect_size; y < barChart.height && y <= (score / scorePerRect); y += tiny_margin + tiny_rect_size) {
+      for (float y = tiny_rect_size; y < barChart.height && y <= (score / scorePerRect); y += tiny_margin + tiny_rect_size) {
         barChart.rect(xPos, barChart.height - y, tiny_rect_size * scale_factor, tiny_rect_size);
       }
       xPos += (tiny_rect_size + tiny_margin)*scale_factor;
