@@ -7,10 +7,10 @@ final int OBJECT_COLOR = 0xFF008080;
 final int COLOR_RED = 0xFFFF0000;
 final int COLOR_GREEN = 0xFF008000;
 final int PLATE_COLOR  = 0xFF40E0D0;
+final int GAME_BACKGROUND_COLOR = 240;
 
-// --- Variables ---
+// --- VARIABLES ---
 boolean shiftDown = false;
-float depth = 200;
 float angleX = 0;
 float angleZ = 0;
 float speed = SPEED_START;
@@ -33,7 +33,7 @@ void setup() {
 }
 
 void draw() {
-  background(240);
+  background(GAME_BACKGROUND_COLOR);
   drawScoreBoardSurfaces();
   displayScoreBoardSurfaces();
   
@@ -59,7 +59,7 @@ void draw() {
 
     // --- Updating and drawing the ball ---
     translate(0, -PLATE_SIZE_Y/2, 0);
-    ball.update(angleZ, angleX, obstaclePositions, cylinderBaseSize);
+    ball.update(angleZ, angleX, obstaclePositions, CYLINDER_BASE_SIZE);
     ball.checkEdges(PLATE_SIZE_X, PLATE_SIZE_Z);
     ball.display();
 
@@ -75,44 +75,4 @@ void draw() {
     drawObstacles();
     drawObstacleUnderMouse();
   }
-}
-
-
-// TODO: add these methods to an Tab called obstacle?
-void addObstacle() {
-  PVector position = new PVector(mouseX - width/2, 0, mouseY - height/2);
-  if (isObstaclePositionAuthorized(position)) obstaclePositions.add(position);
-}
-
-boolean isObstaclePositionAuthorized(PVector position) {
-  for (PVector obstacle : obstaclePositions) {
-    if (PVector.dist(obstacle, position) < 2 * cylinderBaseSize) return false;
-  }
-  if (PVector.dist(ball.location, position) < cylinderBaseSize + RADIUS) return false;
-  else if (!positionInsidePlate(position)) return false;
-  return true;
-}
-
-void drawObstacles() {
-  for (PVector p : obstaclePositions) {
-    cylinderAt(p);
-  }
-}
-
-void drawObstacleUnderMouse() {
-  PVector position = new PVector(mouseX - width/2, 0, mouseY - height/2);
-  if (!isObstaclePositionAuthorized(position)) {
-    setCylinderColor(COLOR_RED);
-  } else {
-    setCylinderColor(COLOR_GREEN);
-  }
-  cylinderAt(position);
-  setCylinderColor(OBJECT_COLOR);
-}
-
-boolean positionInsidePlate(PVector position) {
-  return ( position.x <= PLATE_SIZE_X/2 && 
-    position.x >= - PLATE_SIZE_X/2 &&
-    position.z <= PLATE_SIZE_Z/2 && 
-    position.z >= -PLATE_SIZE_Z/2 );
 }

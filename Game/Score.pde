@@ -2,17 +2,15 @@
 float totalScore;
 float lastScore;
 
-
-
 // --- method to change score ---
-void changeScore(boolean obstacleHit, boolean edgeHit) {
+void changeScore(boolean positive) {
   float currentVelocity = ball.velocity.mag();
 
-  if (obstacleHit) {
+  if (positive) {
     totalScore += currentVelocity;
     lastScore = currentVelocity;
   }
-  if (edgeHit) {
+  else {
     totalScore -= currentVelocity;
     lastScore = -currentVelocity;
     if(totalScore < 0)totalScore = 0;

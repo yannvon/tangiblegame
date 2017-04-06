@@ -3,8 +3,8 @@ int S_HEIGHT_LARGE;
 int S_HEIGHT_SMALL;
 int MARGIN;
 int S_WIDTH;
-final int BACKGROUND_COLOR  = 0xFFE0E0C0;  //FIXME better Color
-final int BACKGROUND_COLOR_LIGHT  = 0xFFEFECCA;
+final int DATA_BACKGROUND_COLOR  = 0xFFE0E0C0;  //FIXME better Color
+final int DATA_BACKGROUND_COLOR_LIGHT  = 0xFFEFECCA;
 final int TOPVIEW_COLOR = 0xFF056481;
 final int BALLTRACE_COLOR = 0xFF197895;
 final int SCOREBOARD_TEXT_COLOR = 60;
@@ -28,7 +28,7 @@ int count;
 int oldPos = -1;
 ArrayList<Float> scores = new ArrayList<Float>();
 
-final float tiny_rect_size = 5;//FIXME chose wisely ;)
+final float tiny_rect_size = 5;
 float tiny_rect_size_y = 5;
 final float tiny_margin = 1;
 final int intervall = 30;
@@ -37,7 +37,7 @@ final float scorePerRect = 30;
 
 // --- Initialiser Methods ---
 void setupSurfaces() {
-  // --- Initialize size Constants ---
+  // --- Initialize size constants ---
   S_HEIGHT_LARGE = height/5;
   S_HEIGHT_SMALL = height/6;
   MARGIN = (S_HEIGHT_LARGE - S_HEIGHT_SMALL)/ 2;
@@ -48,15 +48,15 @@ void setupSurfaces() {
   top_view = createGraphics(S_HEIGHT_SMALL, S_HEIGHT_SMALL, P2D);
   objects = createGraphics(S_HEIGHT_SMALL, S_HEIGHT_SMALL, P2D);
   ball_trace = createGraphics(S_HEIGHT_SMALL, S_HEIGHT_SMALL, P2D);
-  scoreboard = createGraphics(S_WIDTH, S_HEIGHT_SMALL, P2D); //FIXME less width
-  barChart = createGraphics(width - S_HEIGHT_SMALL - S_WIDTH - 5 * MARGIN, S_HEIGHT_SMALL - 3 * MARGIN, P2D);  //FIXME decide on choice here
+  scoreboard = createGraphics(S_WIDTH, S_HEIGHT_SMALL, P2D);
+  barChart = createGraphics(width - S_HEIGHT_SMALL - S_WIDTH - 5 * MARGIN, S_HEIGHT_SMALL - 3 * MARGIN, P2D);
 }
 
 // --- Drawing Methods ---
 void drawScoreBoardSurfaces() {
   // --- Draw large Data Background ---
   data_background.beginDraw();
-  data_background.background(BACKGROUND_COLOR);
+  data_background.background(DATA_BACKGROUND_COLOR);
   data_background.endDraw();
 
   // --- Draw objects (mover & cylinders) ---
@@ -65,9 +65,9 @@ void drawScoreBoardSurfaces() {
   objects.clear();
   objects.translate(S_HEIGHT_SMALL/2, S_HEIGHT_SMALL/2); 
   objects.scale(S_HEIGHT_SMALL / PLATE_SIZE_X);
-  objects.fill(BACKGROUND_COLOR);
+  objects.fill(DATA_BACKGROUND_COLOR);
   for (PVector obstacle : obstaclePositions) {
-    objects.ellipse(obstacle.x, obstacle.z, cylinderBaseSize * 2, cylinderBaseSize *2);
+    objects.ellipse(obstacle.x, obstacle.z, CYLINDER_BASE_SIZE * 2, CYLINDER_BASE_SIZE *2);
   }
   objects.fill(COLOR_RED);
   objects.ellipse(ball.location.x, ball.location.z, RADIUS * 2, RADIUS * 2);
@@ -94,10 +94,7 @@ void drawScoreBoardSurfaces() {
   ball_trace.endDraw();
 
   scoreboard.beginDraw();
-  scoreboard.background(BACKGROUND_COLOR);
-  scoreboard.stroke(255);    //FIXME I tried fixing a white stroke around scoreboard but didn't achieved it
-  scoreboard.fill(255, 0);
-  scoreboard.rect(0, 0, scoreboard.width, scoreboard.height);
+  scoreboard.background(DATA_BACKGROUND_COLOR);
   //FIXME add border to image, tried but no good solution found yet
   String s = String.format(
     "Your score\n %.3f\n\n" +
@@ -116,7 +113,7 @@ void drawScoreBoardSurfaces() {
   }
   if (count == intervall  || oldPos != newPos) {
     barChart.beginDraw();
-    barChart.background(BACKGROUND_COLOR_LIGHT);
+    barChart.background(DATA_BACKGROUND_COLOR_LIGHT);
     barChart.noStroke();
     float xPos = 0;
     float scale_factor = Math.max(newPos*2, 0.3);

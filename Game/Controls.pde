@@ -1,4 +1,4 @@
-// --- Controls Constants ---
+// --- CONTROL CONSTANTS ---
 final float INCREMENT = 0.01;
 final float MAX_SPEED = 0.15;
 final float MIN_SPEED = 0.005;
