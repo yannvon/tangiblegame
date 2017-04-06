@@ -1,4 +1,4 @@
-// --- Score Board Constants ---
+// --- SCORE BOARD CONSTANTS ---
 int S_HEIGHT_LARGE;
 int S_HEIGHT_SMALL;
 int MARGIN;
@@ -8,6 +8,9 @@ final int DATA_BACKGROUND_COLOR_LIGHT  = 0xFFEFECCA;
 final int TOPVIEW_COLOR = 0xFF056481;
 final int BALLTRACE_COLOR = 0xFF197895;
 final int SCOREBOARD_TEXT_COLOR = 60;
+final int SCOREBOARD_STROKE_COLOR = 255;
+final int BARCHART_STROKE_COLOR = 180;
+final int SCOREBOARD_STROKE_WEIGHT = 2;
 
 // --- BACKGROUND SURFACE ---
 PGraphics data_background;
@@ -23,11 +26,10 @@ PGraphics scoreboard;
 // --- BAR CHART surface ---
 PGraphics barChart;
 
-// --- BAR CHART variable ---
+// --- BAR CHART variables & constants ---
 int count;
 int oldPos = -1;
 ArrayList<Float> scores = new ArrayList<Float>();
-
 final float tiny_rect_size = 5;
 float tiny_rect_size_y = 5;
 final float tiny_margin = 1;
@@ -61,7 +63,6 @@ void drawScoreBoardSurfaces() {
 
   // --- Draw objects (mover & cylinders) ---
   objects.beginDraw();
-  objects.pushMatrix();
   objects.clear();
   objects.translate(S_HEIGHT_SMALL/2, S_HEIGHT_SMALL/2); 
   objects.scale(S_HEIGHT_SMALL / PLATE_SIZE_X);
@@ -71,7 +72,6 @@ void drawScoreBoardSurfaces() {
   }
   objects.fill(COLOR_RED);
   objects.ellipse(ball.location.x, ball.location.z, RADIUS * 2, RADIUS * 2);
-  objects.popMatrix();
   objects.endDraw();
 
   // --- Draw top view of plate --
@@ -79,23 +79,22 @@ void drawScoreBoardSurfaces() {
   top_view.background(TOPVIEW_COLOR);
   top_view.endDraw();
 
-  //FIXME ball trace and topview can be merged!
-  //FIXME make ball trace disappear, I already tried, I think I see how its done
   ball_trace.beginDraw();
-  ball_trace.pushMatrix();
-  //ball_trace.fill(TOPVIEW_COLOR, 10);
-  //ball_trace.rect(0, 0, ball_trace.width, ball_trace.height);
   ball_trace.translate(S_HEIGHT_SMALL/2, S_HEIGHT_SMALL/2); 
   ball_trace.scale(S_HEIGHT_SMALL / PLATE_SIZE_X);
   ball_trace.noStroke();
   ball_trace.fill(BALLTRACE_COLOR);
   ball_trace.ellipse(ball.location.x, ball.location.z, RADIUS / 2, RADIUS / 2);
-  ball_trace.popMatrix();
   ball_trace.endDraw();
 
   scoreboard.beginDraw();
-  scoreboard.background(DATA_BACKGROUND_COLOR);
-  //FIXME add border to image, tried but no good solution found yet
+  // Note : In order to add a border we draw a rectangle with a border, instead of setting the background.
+  scoreboard.stroke(SCOREBOARD_STROKE_COLOR);
+  scoreboard.strokeWeight(2);
+  scoreboard.fill(DATA_BACKGROUND_COLOR);
+  scoreboard.rect(SCOREBOARD_STROKE_WEIGHT/2 , SCOREBOARD_STROKE_WEIGHT/2, 
+      scoreboard.width - SCOREBOARD_STROKE_WEIGHT, scoreboard.height - SCOREBOARD_STROKE_WEIGHT);
+  scoreboard.noStroke();
   String s = String.format(
     "Your score\n %.3f\n\n" +
     "Velocity\n%.3f\n\n" +
@@ -113,7 +112,10 @@ void drawScoreBoardSurfaces() {
   }
   if (count == intervall  || oldPos != newPos) {
     barChart.beginDraw();
-    barChart.background(DATA_BACKGROUND_COLOR_LIGHT);
+    // Note : In order to add a border we draw a rectangle with a border, instead of setting the background.
+    barChart.stroke(BARCHART_STROKE_COLOR);
+    barChart.fill(DATA_BACKGROUND_COLOR_LIGHT);
+    barChart.rect(0 , 0, barChart.width - 1, barChart.height - 1);
     barChart.noStroke();
     float xPos = 0;
     float scale_factor = Math.max(newPos*2, 0.3);

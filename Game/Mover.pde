@@ -1,9 +1,9 @@
 // --- CONSTANTS ---
-final float GRAVITY_CONSTANT = 0.2;
+final float GRAVITY_CONSTANT = 0.15;
 final float normalForce = 1;
 final float mu = 0.01;
 final float RADIUS = 20;
-final float BOUNCING_FACTOR = 0.98;  //FIXME
+final float BOUNCING_FACTOR = 0.97;  //FIXME
 final int MOVER_COLOR = 0xFF778899;
 
 class Mover {
@@ -75,6 +75,7 @@ class Mover {
     for (PVector obstacle : obstaclePositions) {
       float dist = PVector.dist(new PVector(location.x, 0, location.z), new PVector(obstacle.x, 0, obstacle.z));
       if (dist < RADIUS + obstacleRadius) {
+        
         // --- set position outside object to avoid bugs ---
         location = obstacle.copy().sub(obstacle.copy().sub(location).normalize().mult(obstacleRadius + RADIUS));
         //TODO check formula & effect correctness

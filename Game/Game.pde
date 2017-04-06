@@ -34,6 +34,8 @@ void setup() {
 
 void draw() {
   background(GAME_BACKGROUND_COLOR);
+  
+  // --- Scoreboard Surfaces ---
   drawScoreBoardSurfaces();
   displayScoreBoardSurfaces();
   
