@@ -1,8 +1,8 @@
 // --- Score Board Constants ---
-final int large_surface_height = 200;    //FIXME dont hardcode!!
-final int small_surface_height = 160;    //FIXME dont hardcode!!
-final int margin = (large_surface_height - small_surface_height)/ 2;
-final int scoreboard_width = 120;          //FIXME dont hardcode!!
+int S_HEIGHT_LARGE;
+int S_HEIGHT_SMALL;
+int MARGIN;
+int S_WIDTH;
 final int BACKGROUND_COLOR  = 0xFFE0E0C0;  //FIXME better Color
 final int BACKGROUND_COLOR_LIGHT  = 0xFFEFECCA;
 final int TOPVIEW_COLOR = 0xFF056481;
@@ -28,36 +28,43 @@ int count;
 int oldPos = -1;
 ArrayList<Float> scores = new ArrayList<Float>();
 
-final float tiny_rect_size = 5;              //FIXME chose wisely ;)
-final float tiny_margin = 2;
+final float tiny_rect_size = 5;//FIXME chose wisely ;)
+float tiny_rect_size_y = 5;
+final float tiny_margin = 1;
 final int intervall = 30;
-final float scorePerRect = 4;
+final float scorePerRect = 30;
 
 
 // --- Initialiser Methods ---
 void setupSurfaces() {
-  data_background = createGraphics(width, large_surface_height, P2D);
-  top_view = createGraphics(small_surface_height, small_surface_height, P2D);
-  objects = createGraphics(small_surface_height, small_surface_height, P2D);
-  ball_trace = createGraphics(small_surface_height, small_surface_height, P2D);
-  scoreboard = createGraphics(scoreboard_width, small_surface_height, P2D); //FIXME less width
-  barChart = createGraphics(width - 2 * small_surface_height - 4 * margin, small_surface_height - 3 * margin, P2D);
-  barChart.beginDraw();    //FIXME allowed to do this here?
-  barChart.background(BACKGROUND_COLOR_LIGHT);
-  barChart.endDraw();
+  // --- Initialize size Constants ---
+  S_HEIGHT_LARGE = height/5;
+  S_HEIGHT_SMALL = height/6;
+  MARGIN = (S_HEIGHT_LARGE - S_HEIGHT_SMALL)/ 2;
+  S_WIDTH = width/12;
+
+  // --- Create Graphics for Surfaces ---
+  data_background = createGraphics(width, S_HEIGHT_LARGE, P2D);
+  top_view = createGraphics(S_HEIGHT_SMALL, S_HEIGHT_SMALL, P2D);
+  objects = createGraphics(S_HEIGHT_SMALL, S_HEIGHT_SMALL, P2D);
+  ball_trace = createGraphics(S_HEIGHT_SMALL, S_HEIGHT_SMALL, P2D);
+  scoreboard = createGraphics(S_WIDTH, S_HEIGHT_SMALL, P2D); //FIXME less width
+  barChart = createGraphics(width - S_HEIGHT_SMALL - S_WIDTH - 5 * MARGIN, S_HEIGHT_SMALL - 3 * MARGIN, P2D);  //FIXME decide on choice here
 }
 
 // --- Drawing Methods ---
 void drawScoreBoardSurfaces() {
+  // --- Draw large Data Background ---
   data_background.beginDraw();
   data_background.background(BACKGROUND_COLOR);
   data_background.endDraw();
 
+  // --- Draw objects (mover & cylinders) ---
   objects.beginDraw();
   objects.pushMatrix();
   objects.clear();
-  objects.translate(small_surface_height/2, small_surface_height/2); 
-  objects.scale(small_surface_height / PLATE_SIZE_X);
+  objects.translate(S_HEIGHT_SMALL/2, S_HEIGHT_SMALL/2); 
+  objects.scale(S_HEIGHT_SMALL / PLATE_SIZE_X);
   objects.fill(BACKGROUND_COLOR);
   for (PVector obstacle : obstaclePositions) {
     objects.ellipse(obstacle.x, obstacle.z, cylinderBaseSize * 2, cylinderBaseSize *2);
@@ -67,6 +74,7 @@ void drawScoreBoardSurfaces() {
   objects.popMatrix();
   objects.endDraw();
 
+  // --- Draw top view of plate --
   top_view.beginDraw();
   top_view.background(TOPVIEW_COLOR);
   top_view.endDraw();
@@ -77,8 +85,8 @@ void drawScoreBoardSurfaces() {
   ball_trace.pushMatrix();
   //ball_trace.fill(TOPVIEW_COLOR, 10);
   //ball_trace.rect(0, 0, ball_trace.width, ball_trace.height);
-  ball_trace.translate(small_surface_height/2, small_surface_height/2); 
-  ball_trace.scale(small_surface_height / PLATE_SIZE_X);
+  ball_trace.translate(S_HEIGHT_SMALL/2, S_HEIGHT_SMALL/2); 
+  ball_trace.scale(S_HEIGHT_SMALL / PLATE_SIZE_X);
   ball_trace.noStroke();
   ball_trace.fill(BALLTRACE_COLOR);
   ball_trace.ellipse(ball.location.x, ball.location.z, RADIUS / 2, RADIUS / 2);
@@ -97,26 +105,27 @@ void drawScoreBoardSurfaces() {
     "Last Score\n%.3f", 
     totalScore, ball.velocity.mag(), lastScore);
   scoreboard.fill(SCOREBOARD_TEXT_COLOR);
-  scoreboard.text(s, margin, margin, scoreboard.width-margin, scoreboard.height - margin);  //FIXME better values :)
+  scoreboard.text(s, MARGIN, MARGIN, scoreboard.width-MARGIN, scoreboard.height - MARGIN);  //FIXME better values :)
   scoreboard.endDraw();
 
-
-
+  // --- Draw BarChart ---
   float newPos = hs.getPos();
   if (++count == intervall) {
     count = 0;
-    if(!scores.isEmpty() || totalScore > scorePerRect * tiny_rect_size) scores.add(totalScore);
+    if (!scores.isEmpty() || totalScore > scorePerRect) scores.add(totalScore);
   }
   if (count == intervall  || oldPos != newPos) {
     barChart.beginDraw();
     barChart.background(BACKGROUND_COLOR_LIGHT);
     barChart.noStroke();
     float xPos = 0;
-    float scale_factor = Math.max(newPos*4, 0.3);
+    float scale_factor = Math.max(newPos*2, 0.3);
     for (float score : scores) {
       barChart.fill(TOPVIEW_COLOR);
-      for (float y = tiny_rect_size; y < barChart.height && y <= (score / scorePerRect); y += tiny_margin + tiny_rect_size) {
-        barChart.rect(xPos, barChart.height - y, tiny_rect_size * scale_factor, tiny_rect_size);
+      int vertical_limit = (int)(score/scorePerRect);
+      if (vertical_limit*(tiny_rect_size_y+tiny_margin) > barChart.height)tiny_rect_size_y = barChart.height/((1.0)*vertical_limit) - tiny_margin;
+      for (int y = 0; y <= vertical_limit; y++) {
+        barChart.rect(xPos, barChart.height - y * (tiny_rect_size_y + tiny_margin), tiny_rect_size * scale_factor, tiny_rect_size_y);
       }
       xPos += (tiny_rect_size + tiny_margin)*scale_factor;
     }
@@ -126,13 +135,11 @@ void drawScoreBoardSurfaces() {
 
 //TODO put inside method above?
 void displayScoreBoardSurfaces() {
-  int yCordinate = height - (small_surface_height + margin);
+  int yCordinate = height - (S_HEIGHT_SMALL + MARGIN);
   image(data_background, 0, height - data_background.height);
-  image(top_view, margin, yCordinate);
-  image(ball_trace, margin, yCordinate);
-  image(objects, margin, yCordinate);
-  stroke(COLOR_RED);
-  image(scoreboard, small_surface_height + 2 * margin, yCordinate);
-  image(barChart, 2 * small_surface_height + 3 * margin, yCordinate); 
-  noStroke();
+  image(top_view, MARGIN, yCordinate);
+  image(ball_trace, MARGIN, yCordinate);
+  image(objects, MARGIN, yCordinate);
+  image(scoreboard, S_HEIGHT_SMALL + 2 * MARGIN, yCordinate);
+  image(barChart, S_HEIGHT_SMALL + S_WIDTH + 4 * MARGIN, yCordinate);
 }

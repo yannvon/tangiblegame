@@ -29,15 +29,14 @@ void setup() {
 
   //Create new mover and scrollbar
   ball = new Mover(new PVector(0, 0, 0));
-  
-  //FIXME: position is hardcoded
-  hs = new HScrollbar(380, height- 80, 300, 20);
+  hs = new HScrollbar(S_HEIGHT_SMALL + S_WIDTH + 4 * MARGIN, height - 3 * MARGIN , 300, 20);
 }
 
 void draw() {
   background(240);
   drawScoreBoardSurfaces();
   displayScoreBoardSurfaces();
+  
   // --- Scroll bar ---
   hs.update();
   hs.display();
