@@ -1,3 +1,10 @@
+//--Controls Constants
+final float INCREMENT = 0.01;
+final float MAX_SPEED = 0.15;
+final float MIN_SPEED = 0.005;
+final float MAX_ANGLE = PI/3;
+
+
 void mouseDragged() 
 {
   if (mouseY > pmouseY) {

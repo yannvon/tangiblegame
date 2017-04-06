@@ -1,9 +1,5 @@
 // --- CONSTANTS ---
-final float INCREMENT = 0.01;
 final float SPEED_START = 0.045;
-final float MAX_SPEED = 0.15;
-final float MIN_SPEED = 0.005;
-final float MAX_ANGLE = PI/3;
 final float PLATE_SIZE_X = 500;
 final float PLATE_SIZE_Y = 20;
 final float PLATE_SIZE_Z = 500;

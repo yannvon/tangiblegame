@@ -23,7 +23,7 @@ class Mover {
     gravityForce.z = -sin(rotX) * GRAVITY_CONSTANT;
 
     float frictionMagnitude = normalForce * mu;
-    PVector friction = velocity.get();
+    PVector friction = velocity.copy();
     friction.mult(-1);
     friction.normalize();
     friction.mult(frictionMagnitude);
