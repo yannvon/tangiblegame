@@ -44,12 +44,13 @@ void draw() {
   hs.display();
 
   // --- Camera & Light settings ---
+  //The values for the light have been set arbitrarily
   directionalLight(255, 255, 255, 0.3, 0.7, 0);
   ambientLight(102, 102, 102);
 
   if (!shiftDown) {
     // --- Display control info ---
-    String s = String.format("RotationX: %.7g  RotationZ = %.7g  Speed = %.2g", degrees(angleX), degrees(angleZ), speed/SPEED_START);
+    String s = String.format("RotationX: %.5g  RotationZ = %.5g  Speed = %.2g", degrees(angleX), degrees(angleZ), speed/SPEED_START);
     text(s, 10, 20);
 
     //-- Drawing the plate (angle and speed given by user) ---
@@ -68,7 +69,9 @@ void draw() {
     // --- Drawing obstacles added by user ---
     drawObstacles();
   } else {
-    // --- Object adding mode ---
+    // --- Object adding mode ---  
+    //The values for the light have been set arbitrarily here as well
+    directionalLight(255,255, 255,0.5, 0.5,-0.5);
     translate(width/2, height/2, 0);
     rotateX(-PI/2);
     fill(PLATE_COLOR);
