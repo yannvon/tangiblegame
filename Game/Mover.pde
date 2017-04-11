@@ -1,9 +1,9 @@
 // --- CONSTANTS ---
 final float GRAVITY_CONSTANT = 0.15;
 final float normalForce = 1;
-final float mu = 0.01;
+final float mu = 0.03;
 final float RADIUS = 20;
-final float BOUNCING_FACTOR = 0.97;  //FIXME
+final float BOUNCING_FACTOR = 0.95;
 final int MOVER_COLOR = 0xFF778899;
 
 class Mover {
@@ -44,28 +44,23 @@ class Mover {
   }
 
   void checkEdges(float boundary_x, float boundary_z) {
-    boolean hit = false;  //FIXME better way than this stupid boolean
-    
+    // --- Check Edges & Adjust score if it hit ---
     if (location.x > boundary_x/2) {
       location.x = boundary_x/2;
       velocity.x = velocity.x * -1 * BOUNCING_FACTOR;
-      hit = true;
+      changeScore(false);
     } else if (location.x < - boundary_x/2) {
       location.x = - boundary_x/2;
       velocity.x = velocity.x * -1 * BOUNCING_FACTOR;
-      hit = true;
+      changeScore(false);
     }
     if (location.z > boundary_z/2) {
       location.z = boundary_z/2;
       velocity.z = velocity.z * -1 * BOUNCING_FACTOR;
-      hit = true;
+      changeScore(false);
     } else if (location.z < -boundary_z/2) {
       location.z = - boundary_x/2;
       velocity.z = velocity.z * -1 * BOUNCING_FACTOR;
-      hit = true;
-    }
-    // --- Adjust score if it hit ---
-    if (hit) {
       changeScore(false);
     }
   }
@@ -78,7 +73,6 @@ class Mover {
         
         // --- set position outside object to avoid bugs ---
         location = obstacle.copy().sub(obstacle.copy().sub(location).normalize().mult(obstacleRadius + RADIUS));
-        //TODO check formula & effect correctness
         
         // --- handle velocity change ---
         PVector normal = new PVector(location.x, 0, location.z);
