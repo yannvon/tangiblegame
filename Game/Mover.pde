@@ -12,7 +12,7 @@ class Mover {
   PVector velocity;
   PVector gravityForce = new PVector(0, 0);
 
-  // --- Consturctor ---
+  // --- Constructor ---
   Mover(PVector location) {
     this.location = location;
     velocity = new PVector(0, 0);
