@@ -1,9 +1,5 @@
 // --- SCORE BOARD CONSTANTS ---
-int S_HEIGHT_LARGE;
-int S_HEIGHT_SMALL;
-int MARGIN;
-int S_WIDTH;
-final int DATA_BACKGROUND_COLOR  = 0xFFE0E0C0;  //FIXME better Color
+final int DATA_BACKGROUND_COLOR  = 0xFFE0E0C0;
 final int DATA_BACKGROUND_COLOR_LIGHT  = 0xFFEFECCA;
 final int TOPVIEW_COLOR = 0xFF056481;
 final int BALLTRACE_COLOR = 0xFF197895;
@@ -11,6 +7,10 @@ final int SCOREBOARD_TEXT_COLOR = 60;
 final int SCOREBOARD_STROKE_COLOR = 255;
 final int BARCHART_STROKE_COLOR = 180;
 final int SCOREBOARD_STROKE_WEIGHT = 2;
+int S_HEIGHT_LARGE;
+int S_HEIGHT_SMALL;
+int MARGIN;
+int S_WIDTH;
 
 // --- BACKGROUND SURFACE ---
 PGraphics data_background;
@@ -34,7 +34,7 @@ final float tiny_rect_size = 5;
 float tiny_rect_size_y = 5;
 final float tiny_margin = 1;
 final int intervall = 30;
-final float scorePerRect = 30;
+final float scorePerRect = 5;
 
 
 // --- Initialiser Methods ---
@@ -101,7 +101,7 @@ void drawScoreBoardSurfaces() {
     "Last Score\n%.3f", 
     totalScore, ball.velocity.mag(), lastScore);
   scoreboard.fill(SCOREBOARD_TEXT_COLOR);
-  scoreboard.text(s, MARGIN, MARGIN, scoreboard.width-MARGIN, scoreboard.height - MARGIN);  //FIXME better values :)
+  scoreboard.text(s, MARGIN, MARGIN, scoreboard.width-MARGIN, scoreboard.height - MARGIN);
   scoreboard.endDraw();
 
   // --- Draw BarChart ---
@@ -132,7 +132,6 @@ void drawScoreBoardSurfaces() {
   }
 }
 
-//TODO put inside method above?
 void displayScoreBoardSurfaces() {
   int yCordinate = height - (S_HEIGHT_SMALL + MARGIN);
   image(data_background, 0, height - data_background.height);
