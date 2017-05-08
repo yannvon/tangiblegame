@@ -24,17 +24,17 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
 
   int [] labels = new int [input.width*input.height];
   List<TreeSet<Integer>> labelsEquivalences = new ArrayList<TreeSet<Integer>>();
-  labelsEquivalences.add(new TreeSet<Integer>()); //FIXME only here to simplify access (i add a useless element at index 0, s.t. all access work later on)
+  labelsEquivalences.add(new TreeSet<Integer>()); //Note: only here to simplify access (i add a useless element at index 0, s.t. all access work later on)
 
   int currentLabel = 1;
 
-  for (int col = 1; col < input.width - 1; col++) { // Skip top & bottom row
-    for (int row = 1; row < input.height - 1; row++) { // Skip left and right col
+  for (int row = 1; row < input.height - 1; row++) { // Skip left and right col
+    for (int col = 1; col < input.width - 1; col++) { // Skip top & bottom row
 
       //if pixel is background don't do anything
       if (input.pixels[row * input.width + col] != color(0)) {
         TreeSet<Integer> neighbors = new TreeSet<Integer>() ;
-        
+
         //Retain all neighbors that have a label already and save the label
         int neighbor1 = labels[(row-1) * input.width + (col-1)];
         if (neighbor1 > 0) neighbors.add(neighbor1);
@@ -44,7 +44,7 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
         if (neighbor3 > 0) neighbors.add(neighbor3);
         int neighbor4 = labels[(row) * input.width + (col-1)];
         if (neighbor4 > 0) neighbors.add(neighbor4);
-        
+
         //Depending on neighbor value, give label to current pixel
         if (neighbors.isEmpty()) {
           labels[row * input.width + col] = currentLabel;
@@ -64,20 +64,19 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
   }
 
 
-
   // Second pass: re-label the pixels by their equivalent class
   // if onlyBiggest==true, count the number of pixels for each label
-  
+
   int occurrences[] = new int[currentLabel];
   int maxLabel = 0;
   int maxLabelCount = 0;
 
-  for (int col = 1; col < input.width - 1; col++) { // Skip top & bottom row
-    for (int row = 1; row < input.height - 1; row++) { // Skip left and right col
+  for (int row = 1; row < input.height - 1; row++) { // Skip left and right col
+    for (int col = 1; col < input.width - 1; col++) { // Skip top & bottom row
+    
       int curr = labels[row * input.width + col];
       if (curr != 0) {
         int newLabel = labelsEquivalences.get(curr).first();
-
         labels[row * input.width + col] = newLabel;
         if (onlyBiggest) {
           int i = ++occurrences[newLabel];
@@ -101,11 +100,15 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
   if (onlyBiggest) {
     m.put(maxLabel, color(255));
   } else {
-    for (int i = 1; i < currentLabel - 1; ++i) {  //FIXME assigne color only to used labels
-      m.put(i, color(ThreadLocalRandom.current().nextInt(1, 255), ThreadLocalRandom.current().nextInt(1, 255), ThreadLocalRandom.current().nextInt(1, 255)));
+    for (int i = 1; i < currentLabel; ++i) {  //FIXME assign color only to used labels
+      //m.put(i, color(i*20)); DEBUG OPTION
+
+      m.put(i, color( ThreadLocalRandom.current().nextInt(1, 255), 
+                      ThreadLocalRandom.current().nextInt(1, 255), 
+                      ThreadLocalRandom.current().nextInt(1, 255)));
     }
   }
-  
+
   //assign pixel value depending on mapping
   for (int i = 0; i < img.width * img.height; i++) {
     result.pixels[i] = m.getOrDefault(labels[i], color(0));
