@@ -11,7 +11,7 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
     for (int col = 1; col < input.width - 1; col++) { // Skip top & bottom row
 
       //if pixel is background, don't do anything
-      if (input.pixels[row * input.width + col] != color(0)) {
+      if (input.pixels[row * input.width + col] > color(0)) {
         TreeSet<Integer> neighbors = new TreeSet<Integer>() ;
 
 

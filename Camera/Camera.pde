@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 PImage img;
 float discretizationStepsPhi = 0.06f;
 float discretizationStepsR = 2.5f;
-int minVotes=250;
+int minVotes=300;
 
 // --- Variables ---
 Capture cam;
@@ -42,7 +42,7 @@ void draw() {
   image(img, 0, 0);
   
   // 2) Hue/Brightness/Saturation Threshhold
-  img = thresholdHSB(img, 50, 143, 100, 255, 50, 170);
+  img = thresholdHSB(img, 50, 150, 40, 215, 40, 215);
   image(img, 640, 0);
   
   // 3) Blob Detection FIXME return grayscale?
@@ -65,6 +65,7 @@ void draw() {
   List<PVector> lines = hough(img);
   plotLines(img, lines);
   
+  //TODO additional, display accumulator
   
   
   // OPTION 2
@@ -79,5 +80,8 @@ void draw() {
 
 PImage pipeline(PImage img) {
   return scharr(thresholdBrightness(convolute(findConnectedComponents(thresholdHSB(img, 50, 143, 100, 255, 50, 170), true)), 100));
-  //FIXME scharr before brightness?
+  // ---BUGS TO RESOLVE ---
+  //FIXME scharr before brightness in pipeline ? (according to week11 pdf)
+  //FIXME rename convolute to blurr (or define some filters as constants and give it as param)
+  //FIXME findConnectedComponent does not work correctly, as it cuts of parts of the image pretty often !
 }
