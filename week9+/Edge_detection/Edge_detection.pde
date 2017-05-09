@@ -20,7 +20,7 @@ void setup() {
   thresholdBar2 = new HScrollbar(800, 540, 800, 20);
   thresholdBar3 = new HScrollbar(800, 580, 800, 20);
   println(imagesEqual(scharr(img), imgCorrect));
-  //noLoop();
+  noLoop();
 }
 void draw() {
   background(color(0, 0, 0));
