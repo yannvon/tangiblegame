@@ -34,9 +34,15 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
           currentLabel++;
         } else {
           labels[row * input.width + col] = neighbors.first();
+          
           //mark other labels to be equivalent to each other
+          //get equivalences of all neighbors
+          TreeSet<Integer> allEqui = new TreeSet<Integer>();
           for (int i : neighbors) {
-            labelsEquivalences.get(i).addAll(neighbors);
+            allEqui.addAll(labelsEquivalences.get(i));
+          }
+          for (int i : allEqui) {
+            labelsEquivalences.set(i, allEqui);
           }
         }
       }
@@ -88,7 +94,7 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
   }
 
   //assign pixel value depending on mapping
-  for (int i = 0; i < img.width * img.height; i++) {
+  for (int i = 0; i < input.width * input.height; i++) {
     result.pixels[i] = m.getOrDefault(labels[i], color(0));
   }
 

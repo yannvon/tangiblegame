@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 PImage img;
 float discretizationStepsPhi = 0.06f;
 float discretizationStepsR = 2.5f;
-int minVotes=300;
+int minVotes=200;
 
 // --- Variables ---
 Capture cam;
@@ -42,7 +42,7 @@ void draw() {
   image(img, 0, 0);
   
   // 2) Hue/Brightness/Saturation Threshhold
-  img = thresholdHSB(img, 50, 150, 40, 215, 40, 215);
+  img = thresholdHSB(img, 50, 150, 40, 200, 50, 200);
   image(img, 640, 0);
   
   // 3) Blob Detection FIXME return grayscale?

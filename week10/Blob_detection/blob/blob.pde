@@ -1,20 +1,30 @@
-import java.util.ArrayList;
+import java.util.ArrayList; //<>// //<>//
 import java.util.List;
 import java.util.TreeSet;
 import java.util.concurrent.ThreadLocalRandom;
 
-PImage img;
+PImage img1;
+PImage img2;
+PImage img3;
 
 void settings() {
-  size(600, 600);
+  size(1200, 600);
 }
 void setup() {
-  img = loadImage("BlobDetection_Test.bmp");
+  img1 = loadImage("BlobDetection_Test.bmp");
+  img2 = loadImage("real_blob_test.bmp");
+  img3 = loadImage("real_blob_test_small.bmp");
 }
 void draw() {
   background(color(0, 0, 0));
-  image(img, 100, 100);
-  image(findConnectedComponents(img, false), 300, 300);
+  image(img1, 50, 100);
+  //image(findConnectedComponents(img1, false), 300, 100);
+
+  PImage real = findConnectedComponents(img2, false);
+  real.save("real_blob_result.bmp");
+  image(real, 600, 100);
+
+
   noLoop();
 }
 
@@ -37,14 +47,21 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
 
         //Retain all neighbors that have a label already and save the label
         int neighborW = labels[(row) * input.width + (col-1)];
-        if (neighborW > 0) neighbors.add(neighborW);
+        if (neighborW > 0) {
+          neighbors.add(neighborW);
+        }
         int neighborNW = labels[(row-1) * input.width + (col-1)];
-        if (neighborNW > 0) neighbors.add(neighborNW);
+        if (neighborNW > 0) {
+          neighbors.add(neighborNW);
+        }
         int neighborN = labels[(row-1) * input.width + (col)];
-        if (neighborN > 0) neighbors.add(neighborN);
+        if (neighborN > 0) {
+          neighbors.add(neighborN);
+        }
         int neighborNE = labels[(row-1) * input.width + (col+1)];
-        if (neighborNE > 0) neighbors.add(neighborNE);
-
+        if (neighborNE > 0) {
+          neighbors.add(neighborNE);
+        }
         //Depending on neighbor value, give label to current pixel
         if (neighbors.isEmpty()) {
           labels[row * input.width + col] = currentLabel;
@@ -54,9 +71,16 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
           currentLabel++;
         } else {
           labels[row * input.width + col] = neighbors.first();
+
+
           //mark other labels to be equivalent to each other
+          //get equivalences of all neighbors
+          TreeSet<Integer> allEqui = new TreeSet<Integer>();
           for (int i : neighbors) {
-            labelsEquivalences.get(i).addAll(neighbors);
+            allEqui.addAll(labelsEquivalences.get(i));
+          }
+          for (int i : allEqui) {
+            labelsEquivalences.set(i, allEqui);
           }
         }
       }
@@ -108,7 +132,7 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
   }
 
   //assign pixel value depending on mapping
-  for (int i = 0; i < img.width * img.height; i++) {
+  for (int i = 0; i < input.width * input.height; i++) {
     result.pixels[i] = m.getOrDefault(labels[i], color(0));
   }
 
