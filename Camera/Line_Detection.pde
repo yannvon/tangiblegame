@@ -11,24 +11,10 @@ class HoughComparator implements java.util.Comparator<Integer> {
     return 1;
   }
 }
-// --- Week 12: Optimisation ---
-// pre-compute the sin and cos values
-float[] tabSin = new float[phiDim];
-float[] tabCos = new float[phiDim];
-
-float ang = 0;
-float inverseR = 1.f / discretizationStepsR;
-
-for (int accPhi = 0; accPhi < phiDim; ang += discretizationStepsPhi, accPhi++) {
-  // we can also pre-multiply by (1/discretizationStepsR) since we need it in the Hough loop
-  tabSin[accPhi] = (float) (Math.sin(ang) * inverseR);
-  tabCos[accPhi] = (float) (Math.cos(ang) * inverseR);
-}
 
 
 //--- Week ??: hough transform ---
 ArrayList<PVector> hough(PImage edgeImg, int nlines, int regionRadius) {
-
   // dimensions of the accumulator
   int phiDim = (int) (Math.PI / discretizationStepsPhi +1);
 
@@ -54,11 +40,15 @@ ArrayList<PVector> hough(PImage edgeImg, int nlines, int regionRadius) {
         // Be careful: r may be negative, so you may want to center onto
         // the accumulator: r += rDim / 2
         for (int phiN = 0; phiN < phiDim; phiN++) {
-
-          float phi = phiN * discretizationStepsPhi;
-          float r = (x * cos(phi) + y * sin(phi));
-
-          r = r/discretizationStepsR;
+          
+          // --- without optimization ---
+          //float phi = phiN * discretizationStepsPhi;
+          //float r = (x * cos(phi) + y * sin(phi));
+          //r = r/discretizationStepsR;
+          
+          // --- with optimization ---
+          float r = (x * t.tabCos[phiN] + y * t.tabSin[phiN]);
+          
           r += rDim / 2;
 
           //increment corresponding accumulator
