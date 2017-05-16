@@ -8,9 +8,10 @@ import java.util.concurrent.ThreadLocalRandom;
 PImage img;
 float discretizationStepsPhi = 0.06f;
 float discretizationStepsR = 2.5f;
-int minVotes=200;
+int minVotes =150;
 int nlines = 10;
 int regionRadius = 10;
+
 // --- Variables ---
 Capture cam;
 
@@ -66,7 +67,7 @@ void draw() {
   List<PVector> lines = hough(img, nlines, regionRadius);
   plotLines(img, lines);
 
-  //TODO additional, display accumulator
+  // 8) Compute quad
   QuadGraph quadgraph = new QuadGraph();
   List<PVector> quads = quadgraph.findBestQuad(lines, img.width, img.height, img.width*img.height, 500, true);
   for(PVector quad : quads){
@@ -89,7 +90,6 @@ PImage pipeline(PImage img) {
   // ---BUGS TO RESOLVE ---
   //FIXME scharr before brightness in pipeline ? (according to week11 pdf)
   //FIXME rename convolute to blurr (or define some filters as constants and give it as param)
-  //FIXME findConnectedComponent does not work correctly, as it cuts of parts of the image pretty often !
   //FIXME blur sets border to white pixels?
   //FIXME blob doesnt work for black image
 }

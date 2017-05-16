@@ -1,3 +1,4 @@
+// Comparator
 class HoughComparator implements java.util.Comparator<Integer> {
   int[] accumulator;
   public HoughComparator(int[] accumulator) {
@@ -10,7 +11,22 @@ class HoughComparator implements java.util.Comparator<Integer> {
     return 1;
   }
 }
+// --- Week 12: Optimisation ---
+// pre-compute the sin and cos values
+float[] tabSin = new float[phiDim];
+float[] tabCos = new float[phiDim];
 
+float ang = 0;
+float inverseR = 1.f / discretizationStepsR;
+
+for (int accPhi = 0; accPhi < phiDim; ang += discretizationStepsPhi, accPhi++) {
+  // we can also pre-multiply by (1/discretizationStepsR) since we need it in the Hough loop
+  tabSin[accPhi] = (float) (Math.sin(ang) * inverseR);
+  tabCos[accPhi] = (float) (Math.cos(ang) * inverseR);
+}
+
+
+//--- Week ??: hough transform ---
 ArrayList<PVector> hough(PImage edgeImg, int nlines, int regionRadius) {
 
   // dimensions of the accumulator
@@ -18,7 +34,7 @@ ArrayList<PVector> hough(PImage edgeImg, int nlines, int regionRadius) {
 
   //The max radius is the image diagonal, but it can be also negative
   int rDim = (int) ((sqrt(edgeImg.width*edgeImg.width +
-    edgeImg.height*edgeImg.height) * 2) / discretizationStepsR +1);
+    edgeImg.height * edgeImg.height) * 2) / discretizationStepsR +1);
 
   // our accumulator
   int[] accumulator = new int[phiDim * rDim];
@@ -52,25 +68,29 @@ ArrayList<PVector> hough(PImage edgeImg, int nlines, int regionRadius) {
     }
   }
 
-  ArrayList<Integer> bestCandidates=new ArrayList<Integer>();
+  // --- Week 12: Line Selection ---
+  ArrayList<Integer> bestCandidates = new ArrayList<Integer>();
   for (int idx = 0; idx < accumulator.length; idx++) {
-    //take only the most voted lines
     int value = accumulator[idx];
-    if(value > minVotes){
-       //take only maximas
-       boolean maxima = true;
-       for(int x = -regionRadius; x <= regionRadius; x++){
-         for(int y = -regionRadius; y <= regionRadius; y++){
-           int index = y * edgeImg.width + x + idx;
-             if(index > 0 && index < accumulator.length && accumulator[index] > value)maxima = false;
-         }
-       }
-      if(maxima)bestCandidates.add(idx); 
+
+    //STEP 1: take only the most voted lines
+    if (value > minVotes) {
+      //STEP 2: take only maxima of region
+      boolean maxima = true;
+      for (int x = -regionRadius; x <= regionRadius; x++) {
+        for (int y = -regionRadius; y <= regionRadius; y++) {
+          int index = y * edgeImg.width + x + idx;
+          if (index > 0 && index < accumulator.length && accumulator[index] > value) maxima = false;
+        }
+      }
+      if (maxima) bestCandidates.add(idx);
     }
   }
+  //STEP 3: sort the promising lines
   Collections.sort(bestCandidates, new HoughComparator(accumulator));
 
-  ArrayList<PVector> lines=new ArrayList<PVector>();
+  //STEP 4: take as many lines as asked and compute the line parameters
+  ArrayList<PVector> lines = new ArrayList<PVector>();
   for (int i = 0; i < nlines && i < bestCandidates.size(); i++) {
     int idx = bestCandidates.get(i);
     // first, compute back the (r, phi) polar coordinates:
@@ -81,7 +101,8 @@ ArrayList<PVector> hough(PImage edgeImg, int nlines, int regionRadius) {
     lines.add(new PVector(r, phi));
   }
 
-  // --- Opt. Create an image of the accumulator ---
+  //TODO remove following part
+  // --- Optional: Create an image of the accumulator ---
   PImage houghImg = createImage(rDim, phiDim, ALPHA);
   for (int i = 0; i < accumulator.length; i++) {
     houghImg.pixels[i] = color(min(255, accumulator[i]));
@@ -96,7 +117,7 @@ ArrayList<PVector> hough(PImage edgeImg, int nlines, int regionRadius) {
   return lines;
 }
 
-
+// --- Method to display lines on ---
 void plotLines(PImage edgeImg, List<PVector> lines) {
 
   for (int idx = 0; idx < lines.size(); idx++) {
