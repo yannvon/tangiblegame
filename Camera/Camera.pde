@@ -9,7 +9,8 @@ PImage img;
 float discretizationStepsPhi = 0.06f;
 float discretizationStepsR = 2.5f;
 int minVotes=200;
-
+int nlines = 10;
+int regionRadius = 10;
 // --- Variables ---
 Capture cam;
 
@@ -62,11 +63,16 @@ void draw() {
   image(img, 1280, 480);
   
   // 7) Hough transform
-  List<PVector> lines = hough(img);
+  List<PVector> lines = hough(img, nlines, regionRadius);
   plotLines(img, lines);
-  
+
   //TODO additional, display accumulator
-  
+  QuadGraph quadgraph = new QuadGraph();
+  List<PVector> quads = quadgraph.findBestQuad(lines, img.width, img.height, img.width*img.height, 500, true);
+  for(PVector quad : quads){
+    fill(255, 0, 0);
+    ellipse(quad.x, quad.y, 15, 15);
+  }
   
   // OPTION 2
   /*

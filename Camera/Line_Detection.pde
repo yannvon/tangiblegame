@@ -1,4 +1,17 @@
-ArrayList<PVector> hough(PImage edgeImg) {
+class HoughComparator implements java.util.Comparator<Integer> {
+  int[] accumulator;
+  public HoughComparator(int[] accumulator) {
+    this.accumulator = accumulator;
+  }
+  @Override
+    public int compare(Integer l1, Integer l2) {
+    if (accumulator[l1] > accumulator[l2]
+      || (accumulator[l1] == accumulator[l2] && l1 < l2)) return -1;
+    return 1;
+  }
+}
+
+ArrayList<PVector> hough(PImage edgeImg, int nlines, int regionRadius) {
 
   // dimensions of the accumulator
   int phiDim = (int) (Math.PI / discretizationStepsPhi +1);
@@ -39,17 +52,33 @@ ArrayList<PVector> hough(PImage edgeImg) {
     }
   }
 
-  ArrayList<PVector> lines=new ArrayList<PVector>();
+  ArrayList<Integer> bestCandidates=new ArrayList<Integer>();
   for (int idx = 0; idx < accumulator.length; idx++) {
-    if (accumulator[idx] > minVotes) {
-
-      // first, compute back the (r, phi) polar coordinates:
-      int accPhi = (int) (idx / (rDim));
-      int accR = idx - (accPhi) * (rDim);
-      float r = (accR - (rDim) * 0.5f) * discretizationStepsR;
-      float phi = accPhi * discretizationStepsPhi;
-      lines.add(new PVector(r, phi));
+    //take only the most voted lines
+    int value = accumulator[idx];
+    if(value > minVotes){
+       //take only maximas
+       boolean maxima = true;
+       for(int x = -regionRadius; x <= regionRadius; x++){
+         for(int y = -regionRadius; y <= regionRadius; y++){
+           int index = y * edgeImg.width + x + idx;
+             if(index > 0 && index < accumulator.length && accumulator[index] > value)maxima = false;
+         }
+       }
+      if(maxima)bestCandidates.add(idx); 
     }
+  }
+  Collections.sort(bestCandidates, new HoughComparator(accumulator));
+
+  ArrayList<PVector> lines=new ArrayList<PVector>();
+  for (int i = 0; i < nlines && i < bestCandidates.size(); i++) {
+    int idx = bestCandidates.get(i);
+    // first, compute back the (r, phi) polar coordinates:
+    int accPhi = (int) (idx / (rDim));
+    int accR = idx - (accPhi) * (rDim);
+    float r = (accR - (rDim) * 0.5f) * discretizationStepsR;
+    float phi = accPhi * discretizationStepsPhi;
+    lines.add(new PVector(r, phi));
   }
 
   // --- Opt. Create an image of the accumulator ---
@@ -69,17 +98,17 @@ ArrayList<PVector> hough(PImage edgeImg) {
 
 
 void plotLines(PImage edgeImg, List<PVector> lines) {
-  
+
   for (int idx = 0; idx < lines.size(); idx++) {
     PVector line = lines.get(idx);
     float r = line.x;
     float phi = line.y;
-    
+
     // Cartesian equation of a line: y = ax + b
     // in polar, y = (-cos(phi)/sin(phi))x + (r/sin(phi))
     // => y = 0 : x = r / cos(phi)
     // => x = 0 : y = r / sin(phi)
-    
+
     // compute the intersection of this line with the 4 borders of the image
     int x0 = 0;
     int y0 = (int) (r / sin(phi));
