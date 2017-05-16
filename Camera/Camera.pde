@@ -42,10 +42,10 @@ void draw() {
   image(img, 0, 0);
   
   // 2) Hue/Brightness/Saturation Threshhold
-  img = thresholdHSB(img, 50, 150, 40, 200, 50, 200);
+  img = thresholdHSB(img, 50, 143, 40, 225, 40, 220);
   image(img, 640, 0);
   
-  // 3) Blob Detection FIXME return grayscale?
+  // 3) Blob Detection
   img = findConnectedComponents(img, true);
   image(img, 1280, 0);
   
@@ -84,4 +84,6 @@ PImage pipeline(PImage img) {
   //FIXME scharr before brightness in pipeline ? (according to week11 pdf)
   //FIXME rename convolute to blurr (or define some filters as constants and give it as param)
   //FIXME findConnectedComponent does not work correctly, as it cuts of parts of the image pretty often !
+  //FIXME blur sets border to white pixels?
+  //FIXME blob doesnt work for black image
 }

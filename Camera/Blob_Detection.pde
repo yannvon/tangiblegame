@@ -83,7 +83,7 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
 
   //create mapping between label and color
   HashMap<Integer, Integer> m = new HashMap<Integer, Integer>();
-  if (onlyBiggest) {
+  if (onlyBiggest && maxLabel > 0) {
     m.put(maxLabel, color(255));
   } else {
     for (int i = 1; i < currentLabel; ++i) {  //FIXME assign color only to used labels
