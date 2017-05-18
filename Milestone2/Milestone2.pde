@@ -25,21 +25,39 @@ Trig t;
 
 
 void settings() {
-  size(1600, 600);
+  size(2400, 600);
 }
 void setup() {
-  img = loadImage("board4.jpg");
+  img = loadImage("board3.jpg");
   t = new Trig();
+  noLoop();
 }
 void draw() {
-  background(color(0, 0, 0));
+  // --- Entire Pipeline Displayed ---
+  // 1) Input Image
   image(img, 0, 0);
-  
-  PImage pipelined = pipeline(img);
-  image(pipelined, 800, 0);
 
-  List<PVector> lines = hough(pipelined, nlines, regionRadius);
-  plotLines(pipelined, lines);
+  // 2) Hue/Brightness/Saturation Threshhold
+  img = thresholdHSB(img, 50, 143, 30, 255, 30, 170);
+
+  // 3) Blob Detection
+  img = findConnectedComponents(img, true);
+  PImage blob = img;
+
+  // 4) Blurring (assumes grayscale)
+  img = convolute(img);
+
+  // 5) Edge Detection
+  img = scharr(img);
+  PImage scharr = img;
+
+  // 6) Low brightness supression
+  img = thresholdBrightness(img, 110);
+  PImage threshBright = img;
+
+  // 7) Hough transform
+  List<PVector> lines = hough(img, nlines, regionRadius);
+  plotLines(img, lines);
 
   // 8) Compute quad
   QuadGraph quadgraph = new QuadGraph();
@@ -47,8 +65,12 @@ void draw() {
   for (PVector quad : quads) {
     fill(255, 0, 0);
     ellipse(quad.x, quad.y, 15, 15);
-  }
+  }  
 
+
+  // 9) Display the corresponding steps
+  image(blob, 800, 0);
+  image(threshBright, 1400, 0);
 } 
 
 
