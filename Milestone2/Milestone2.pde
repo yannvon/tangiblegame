@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 float discretizationStepsPhi = 0.06f;
 float discretizationStepsR = 2.5f;
 int minVotes =150;
-int nlines = 5;
+int nlines = 4;
 int regionRadius = 10;
 
 // --- Variables ---
@@ -25,10 +25,10 @@ Trig t;
 
 
 void settings() {
-  fullScreen();
+  size(1600, 600);
 }
 void setup() {
-  img = loadImage("board3.jpg");
+  img = loadImage("board4.jpg");
   t = new Trig();
 }
 void draw() {
@@ -36,7 +36,7 @@ void draw() {
   image(img, 0, 0);
   
   PImage pipelined = pipeline(img);
-  image(pipelined, 640, 0);
+  image(pipelined, 800, 0);
 
   List<PVector> lines = hough(pipelined, nlines, regionRadius);
   plotLines(pipelined, lines);
@@ -54,5 +54,5 @@ void draw() {
 
 
 PImage pipeline(PImage img) {
-  return thresholdBrightness(scharr(convolute(findConnectedComponents(thresholdHSB(img, 50, 143, 40, 225, 40, 220), true))), 100);
+  return thresholdBrightness(scharr(convolute(findConnectedComponents(thresholdHSB(img, 50, 143, 100, 255, 50, 170), true))), 100);
 }
