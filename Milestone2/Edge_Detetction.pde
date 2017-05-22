@@ -48,7 +48,10 @@ boolean imagesEqual(PImage img1, PImage img2) {
   return true;
 }
 
+
 PImage convolute(PImage img) {
+  
+  //kernel corresponding to a blurr operation
   float[][] kernel = { 
     { 9, 12, 9 }, 
     { 12, 15, 12 }, 

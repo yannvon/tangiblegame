@@ -86,7 +86,7 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
   if (onlyBiggest && maxLabel > 0) {
     m.put(maxLabel, color(255));
   } else {
-    for (int i = 1; i < currentLabel; ++i) {  //FIXME assign color only to used labels
+    for (int i = 1; i < currentLabel; ++i) {  // assign color only to used labels
       m.put(i, color( ThreadLocalRandom.current().nextInt(1, 255), 
         ThreadLocalRandom.current().nextInt(1, 255), 
         ThreadLocalRandom.current().nextInt(1, 255)));

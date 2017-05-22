@@ -13,7 +13,7 @@ class HoughComparator implements java.util.Comparator<Integer> {
 }
 
 
-//--- Week ??: hough transform ---
+//--- Week 11: hough transform ---
 ArrayList<PVector> hough(PImage edgeImg, int nlines, int regionRadius) {
   // dimensions of the accumulator
   int phiDim = (int) (Math.PI / discretizationStepsPhi +1);
@@ -91,8 +91,8 @@ ArrayList<PVector> hough(PImage edgeImg, int nlines, int regionRadius) {
     lines.add(new PVector(r, phi));
   }
 
-  //TODO remove following part
   // --- Optional: Create an image of the accumulator ---
+  /*
   PImage houghImg = createImage(rDim, phiDim, ALPHA);
   for (int i = 0; i < accumulator.length; i++) {
     houghImg.pixels[i] = color(min(255, accumulator[i]));
@@ -101,8 +101,9 @@ ArrayList<PVector> hough(PImage edgeImg, int nlines, int regionRadius) {
   // You may want to resize the accumulator to make it easier to see:
   houghImg.resize(600, 600);
   houghImg.updatePixels();
-
-  //image(houghImg, houghImg.width, 0);
+  
+  image(houghImg, houghImg.width, 0);
+  */
 
   return lines;
 }
