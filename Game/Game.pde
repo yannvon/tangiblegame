@@ -1,3 +1,39 @@
+// Milestone2 
+//FIXME move imports where they belong !!
+import processing.video.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
+import java.util.concurrent.ThreadLocalRandom;
+
+// --- OpenCV Imports ---
+import gab.opencv.*;
+OpenCV opencv;
+
+
+// --- Constants ---
+final float discretizationStepsPhi = 0.06f;
+final float discretizationStepsR = 2.5f;
+final int minVotes =150;
+final int nlines = 4;
+final int regionRadius = 10;
+final float resizeFactor = 0.7;
+
+// --- Variables ---
+PImage img;
+PImage pipelined;
+
+// --- Trig Optimisation ---
+Trig t;
+
+// --- Pose estimation ---
+TwoDThreeD twoDThreeD;
+
+// --- Camera ---
+Capture cam;
+final int camera_width = 640;
+final int camera_height = 480;
+
 // --- CONSTANTS ---
 final float SPEED_START = 0.045;
 final float PLATE_SIZE_X = 500;
@@ -22,6 +58,34 @@ void settings() {
   fullScreen(P3D);
 }
 void setup() {
+  // --- setup camera ---
+  String[] cameras = Capture.list();
+  if (cameras.length == 0) {
+    println("There are no cameras available for capture.");
+    exit();
+  } else {
+    println("Available cameras:");
+    for (int i = 0; i < cameras.length; i++) {
+      println(cameras[i]);
+    }
+    cam = new Capture(this, cameras[0]);
+    cam.start();
+  }
+
+  // --- image processing ---
+  opencv = new OpenCV(this, 100, 100);
+  //img = loadImage("board1.jpg");
+  
+  twoDThreeD = new TwoDThreeD(camera_width, camera_height, 0);
+  t = new Trig();
+
+  /*
+  PVector rotation = computeRotation(findCorners(img));
+   angleX = rotation.z;
+   angleZ = rotation.x;
+   */
+
+  // --- game processing ----
   noStroke();
   //Load the Cylinder Shape and setup de surfaces
   loadCylinder();
@@ -29,16 +93,32 @@ void setup() {
 
   //Create new mover and scrollbar
   ball = new Mover(new PVector(0, 0, 0));
-  hs = new HScrollbar(S_HEIGHT_SMALL + S_WIDTH + 4 * MARGIN, height - 3 * MARGIN , 300, 20);
+  hs = new HScrollbar(S_HEIGHT_SMALL + S_WIDTH + 4 * MARGIN, height - 3 * MARGIN, 300, 20);
 }
 
 void draw() {
+  // --- ATTENTION ON Fé LA CAMERA
+  if (cam.available() == true) {
+    cam.read();
+  }
+  img = cam.get();
+  List<PVector> quads = findCorners(img);
+  if (quads.size() == 4) {
+    PVector rotation = computeRotation(quads);
+    angleX = rotation.x;
+    angleZ = rotation.y;
+    
+    if(angleX < 0) angleX = 
+  }
+  //jai fini
+
   background(GAME_BACKGROUND_COLOR);
-  
+
   // --- Scoreboard Surfaces ---
   drawScoreBoardSurfaces();
   displayScoreBoardSurfaces();
-  
+  displayCamera(quads);
+
   // --- Scroll bar ---
   hs.update();
   hs.display();
@@ -71,7 +151,7 @@ void draw() {
   } else {
     // --- Object adding mode ---  
     //The values for the light have been set arbitrarily here as well
-    directionalLight(255,255, 255,0.5, 0.5,-0.5);
+    directionalLight(255, 255, 255, 0.5, 0.5, -0.5);
     translate(width/2, height/2, 0);
     rotateX(-PI/2);
     fill(PLATE_COLOR);
