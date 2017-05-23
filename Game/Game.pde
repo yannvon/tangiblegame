@@ -15,7 +15,7 @@ OpenCV opencv;
 final float discretizationStepsPhi = 0.06f;
 final float discretizationStepsR = 2.5f;
 final int minVotes =150;
-final int nlines = 10;
+final int nlines = 4;
 final int regionRadius = 10;
 final float resizeFactor = 0.7;
 
@@ -76,7 +76,7 @@ void setup() {
   opencv = new OpenCV(this, 100, 100);
   //img = loadImage("board1.jpg");
   
-  twoDThreeD = new TwoDThreeD(camera_width, camera_height, 0);
+  twoDThreeD = new TwoDThreeD(camera_width, camera_height, 15);
   t = new Trig();
 
   /*
