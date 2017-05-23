@@ -108,10 +108,10 @@ void draw() {
     angleX = rotation.x;
     angleZ = rotation.y;
     
-    if(angleX < 0) angleX = Math.max(angleX, -MAX_ANGLE);
-    else if(angleX >0) angleX = Math.min(angleX, MAX_ANGLE);
-    if(angleZ < 0) angleZ = Math.max(angleZ, -MAX_ANGLE);
-    else if(angleZ >0) angleZ = Math.min(angleZ, MAX_ANGLE);
+    if(angleX < -PI/2) angleX += PI;
+    else if(angleX > +PI/2) angleX -= PI;
+    if(angleZ < -PI/2) angleZ += PI;
+    else if(angleZ > PI/2) angleZ -=PI;
   }
   //jai fini
 
