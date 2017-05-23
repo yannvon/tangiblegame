@@ -15,7 +15,7 @@ OpenCV opencv;
 final float discretizationStepsPhi = 0.06f;
 final float discretizationStepsR = 2.5f;
 final int minVotes =150;
-final int nlines = 4;
+final int nlines = 10;
 final int regionRadius = 10;
 final float resizeFactor = 0.7;
 
@@ -108,7 +108,10 @@ void draw() {
     angleX = rotation.x;
     angleZ = rotation.y;
     
-    if(angleX < 0) angleX = 
+    if(angleX < 0) angleX = Math.max(angleX, -MAX_ANGLE);
+    else if(angleX >0) angleX = Math.min(angleX, MAX_ANGLE);
+    if(angleZ < 0) angleZ = Math.max(angleZ, -MAX_ANGLE);
+    else if(angleZ >0) angleZ = Math.min(angleZ, MAX_ANGLE);
   }
   //jai fini
 
