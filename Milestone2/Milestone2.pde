@@ -29,7 +29,7 @@ void settings() {
 
 void setup() {
   opencv = new OpenCV(this, 100, 100);
-  img = loadImage("board4.jpg");
+  img = loadImage("board1.jpg");
   t = new Trig();
   noLoop();
 }

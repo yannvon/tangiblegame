@@ -76,7 +76,7 @@ void setup() {
   opencv = new OpenCV(this, 100, 100);
   //img = loadImage("board1.jpg");
   
-  twoDThreeD = new TwoDThreeD(camera_width, camera_height, 15);
+  twoDThreeD = new TwoDThreeD(camera_width, camera_height, 0);
   t = new Trig();
 
   /*
