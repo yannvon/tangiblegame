@@ -46,6 +46,7 @@ final int PLATE_COLOR  = 0xFF40E0D0;
 final int GAME_BACKGROUND_COLOR = 240;
 
 // --- VARIABLES ---
+PImage bg;
 boolean shiftDown = false;
 float angleX = 0;
 float angleZ = 0;
@@ -73,6 +74,9 @@ void settings() {
   fullScreen(P3D);
 }
 void setup() {
+  bg = loadImage("backgroundSky.jpg");
+  
+  
   // --- setup camera ---
   String[] cameras = Capture.list();
   if (cameras.length == 0) {
@@ -104,7 +108,7 @@ void setup() {
   noStroke();
   //Load the Cylinder Shape and setup de surfaces
   loadCylinder();
-  loadR2D2();
+  loadDroidShapes();
   setupSurfaces();
 
   //Create new mover and scrollbar
@@ -138,8 +142,8 @@ void draw() {
   }
   //jai fini
 
-  background(GAME_BACKGROUND_COLOR);
-
+  //background(GAME_BACKGROUND_COLOR);
+  background(bg);
   // --- Scoreboard Surfaces ---
   drawScoreBoardSurfaces();
   displayScoreBoardSurfaces();

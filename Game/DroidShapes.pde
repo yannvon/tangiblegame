@@ -1,14 +1,26 @@
 PShape R2D2White;
 PShape R2D2Red;
 PShape R2D2Green;
+PShape BB8Head;
 
 float R2D2Scale = 1.9;
 
 //Method that loads the R2D2 shape
-void loadR2D2() {
+void loadDroidShapes() {
   R2D2White = loadShape("R2D2White.obj");
   R2D2Red = loadShape("R2D2Red.obj");
   R2D2Green = loadShape("R2D2Green.obj");
+  BB8Head = loadShape("bb8Head.obj");
+}
+
+void BB8HeadAt(PVector position){
+  pushMatrix();
+  translate(position.x, -2*RADIUS+1, position.z);
+  rotateX(PI);
+  rotateY(3*PI/2);
+  scale(6);
+  shape(BB8Head);
+  popMatrix();
 }
 
 void R2D2RedAt(PVector position){

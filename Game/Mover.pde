@@ -41,6 +41,7 @@ class Mover {
     fill(MOVER_COLOR);
     sphere(RADIUS);
     popMatrix();
+    BB8HeadAt(new PVector(location.x,location.y,location.z));
   }
 
   void checkEdges(float boundary_x, float boundary_z) {
