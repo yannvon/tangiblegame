@@ -2,7 +2,7 @@
 final float GRAVITY_CONSTANT = 0.15;
 final float normalForce = 1;
 final float mu = 0.03;
-final float RADIUS = 20;
+final float RADIUS = 10;
 final float BOUNCING_FACTOR = 0.95;
 final int MOVER_COLOR = 0xFF778899;
 
@@ -85,8 +85,13 @@ class Mover {
         V2.add(normal);
         velocity = V2.mult(BOUNCING_FACTOR);
         
+        //--- remove object form list ---
+        obstaclePositions.remove(obstacle);
+        
         // --- Adapt Score ---
         changeScore(true);
+        
+        return;
       }
     }
   }

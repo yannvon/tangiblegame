@@ -36,7 +36,7 @@ final int camera_height = 480;
 
 // --- CONSTANTS ---
 final float SPEED_START = 0.045;
-final float PLATE_SIZE_X = 500;
+final float PLATE_SIZE_X = 600;
 final float PLATE_SIZE_Y = 20;
 final float PLATE_SIZE_Z = 500;
 final int OBJECT_COLOR = 0xFF008080;
