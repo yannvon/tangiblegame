@@ -37,6 +37,9 @@ void mouseWheel(MouseEvent event) {
 void keyPressed() {
   if (keyCode == SHIFT) {
     shiftDown = true;
+  } else if(keyCode == CONTROL){
+    angleX = 0;
+    angleZ = 0;
   }
 }
 

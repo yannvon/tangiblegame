@@ -14,19 +14,19 @@ boolean isObstaclePositionAuthorized(PVector position) {
 
 void drawObstacles() {
   for (PVector p : obstaclePositions) {
-    cylinderAt(p);
+    R2D2WhiteAt(p);
   }
 }
 
 void drawObstacleUnderMouse() {
   PVector position = new PVector(mouseX - width/2, 0, mouseY - height/2);
   if (!isObstaclePositionAuthorized(position)) {
-    setCylinderColor(COLOR_RED);
+    R2D2RedAt(position);
   } else {
-    setCylinderColor(COLOR_GREEN);
+    R2D2GreenAt(position);
   }
-  cylinderAt(position);
-  setCylinderColor(OBJECT_COLOR);
+//  R2D2At(position);
+ // setCylinderColor(OBJECT_COLOR);
 }
 
 boolean positionInsidePlate(PVector position) {
