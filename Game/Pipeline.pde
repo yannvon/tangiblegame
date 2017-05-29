@@ -37,7 +37,7 @@ PVector computeRotation(List<PVector> quads){
   PVector rotationRad = twoDThreeD.get3DRotations(pointsHomogeneous);
   
   //println("r_x = "+radToDeg(rotationRad.x)+"°, r_y = "+radToDeg(rotationRad.y)+"°, r_z = "+radToDeg(rotationRad.z)+"°"); 
-  return new PVector(rotationRad.x, rotationRad.y, rotationRad.z);
+  return new PVector(rotationRad.x, rotationRad.y, -rotationRad.z);
 }
 
 float radToDeg(float angle){

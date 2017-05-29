@@ -25,8 +25,6 @@ void drawObstacleUnderMouse() {
   } else {
     R2D2GreenAt(position);
   }
-//  R2D2At(position);
- // setCylinderColor(OBJECT_COLOR);
 }
 
 boolean positionInsidePlate(PVector position) {

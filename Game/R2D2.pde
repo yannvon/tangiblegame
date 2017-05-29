@@ -2,7 +2,7 @@ PShape R2D2White;
 PShape R2D2Red;
 PShape R2D2Green;
 
-float R2D2Scale = 3;
+float R2D2Scale = 1.9;
 
 //Method that loads the R2D2 shape
 void loadR2D2() {

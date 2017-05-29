@@ -140,7 +140,7 @@ void draw() {
     //-- Drawing the plate (angle and speed given by user) ---
     translate(width/2, height/2, 0); 
     rotateX(angleX);
-    rotateZ(-angleZ);
+    rotateZ(angleZ);
     fill(PLATE_COLOR);
     box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z); 
 
