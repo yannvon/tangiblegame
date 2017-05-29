@@ -1,9 +1,12 @@
 PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
-
+  // --- Union find datastructure ---
+  UnionFind uf = new UnionFind(5000);
+  
+  
   // First pass: label the pixels and store labels’ equivalences
   int [] labels = new int [input.width*input.height];
-  List<TreeSet<Integer>> labelsEquivalences = new ArrayList<TreeSet<Integer>>();
-  labelsEquivalences.add(null); //Note: only here to simplify accesses (i add a useless element at index 0, s.t. all access work later on)
+  //List<TreeSet<Integer>> labelsEquivalences = new ArrayList<TreeSet<Integer>>();
+  //labelsEquivalences.add(null); //Note: only here to simplify accesses (i add a useless element at index 0, s.t. all access work later on)
 
   int currentLabel = 1;
 
@@ -28,22 +31,27 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
         //Depending on neighbor value, give label to current pixel
         if (neighbors.isEmpty()) {
           labels[row * input.width + col] = currentLabel;
-          TreeSet<Integer> newEquivalenceTree = new TreeSet<Integer>();
-          newEquivalenceTree.add(currentLabel);
-          labelsEquivalences.add(newEquivalenceTree);
+          //TreeSet<Integer> newEquivalenceTree = new TreeSet<Integer>();
+          //newEquivalenceTree.add(currentLabel);
+          //labelsEquivalences.add(newEquivalenceTree);
           currentLabel++;
         } else {
-          labels[row * input.width + col] = neighbors.first();
+          int first = neighbors.first();
+          labels[row * input.width + col] = first;
           
           //mark other labels to be equivalent to each other
           //get equivalences of all neighbors
-          TreeSet<Integer> allEqui = new TreeSet<Integer>();
+          
+          //TreeSet<Integer> allEqui = new TreeSet<Integer>();
           for (int i : neighbors) {
-            allEqui.addAll(labelsEquivalences.get(i));
+            //allEqui.addAll(labelsEquivalences.get(i));
+            if(first != i)uf.union(first,i); 
           }
+          /*
           for (int i : allEqui) {
             labelsEquivalences.set(i, allEqui);
           }
+          */
         }
       }
     }
@@ -62,7 +70,8 @@ PImage findConnectedComponents(PImage input, boolean onlyBiggest) {
 
       int curr = labels[row * input.width + col];
       if (curr != 0) {
-        int newLabel = labelsEquivalences.get(curr).first();
+        //int newLabel = labelsEquivalences.get(curr).first();
+        int newLabel = uf.find(curr);
         labels[row * input.width + col] = newLabel;
         if (onlyBiggest) {
           int occurenceNewLabel = ++occurrences[newLabel];

@@ -14,9 +14,9 @@ OpenCV opencv;
 // --- Constants ---
 final float discretizationStepsPhi = 0.06f;
 final float discretizationStepsR = 2.5f;
-final int minVotes =150;
-final int nlines = 4;
-final int regionRadius = 10;
+final int minVotes =200;
+final int nlines = 1000;
+final int regionRadius = 50;
 final float resizeFactor = 0.7;
 
 // --- Variables ---
