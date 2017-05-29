@@ -3,7 +3,7 @@ List<PVector> findCorners(PImage img) {
   // --- Entire Pipeline Displayed ---
 
   // 2) Hue/Brightness/Saturation Threshhold
-  PImage result = thresholdHSB(img, 50, 143, 40, 225, 40, 220);
+  PImage result = thresholdHSB(img, hueMin, hueMax, saturationMin, saturationMax, brightnessMin, brightnessMax);
 
   // 3) Blob Detection
   result = findConnectedComponents(result, true);

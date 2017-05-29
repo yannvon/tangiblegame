@@ -38,7 +38,7 @@ final int camera_height = 480;
 final float SPEED_START = 0.045;
 final float PLATE_SIZE_X = 600;
 final float PLATE_SIZE_Y = 20;
-final float PLATE_SIZE_Z = 500;
+final float PLATE_SIZE_Z = 600;
 final int OBJECT_COLOR = 0xFF008080;
 final int COLOR_RED = 0xFFFF0000;
 final int COLOR_GREEN = 0xFF008000;
@@ -53,6 +53,21 @@ float speed = SPEED_START;
 ArrayList<PVector> obstaclePositions = new ArrayList<PVector>();
 Mover ball;
 HScrollbar hs;
+HScrollbar tHueMin;
+HScrollbar tHueMax;
+HScrollbar tSatMin;
+HScrollbar tSatMax;
+HScrollbar tBriMin;
+HScrollbar tBriMax;
+boolean setUpPhase = true;
+
+// --- Threshold Variables ---
+int hueMin = 50;
+int hueMax = 143;
+int brightnessMin = 40;
+int brightnessMax = 225;
+int saturationMin = 40;
+int saturationMax = 220;
 
 void settings() {
   fullScreen(P3D);
@@ -75,7 +90,7 @@ void setup() {
   // --- image processing ---
   opencv = new OpenCV(this, 100, 100);
   //img = loadImage("board1.jpg");
-  
+
   twoDThreeD = new TwoDThreeD(camera_width, camera_height, 0);
   t = new Trig();
 
@@ -95,7 +110,14 @@ void setup() {
   //Create new mover and scrollbar
   ball = new Mover(new PVector(0, 0, 0));
   hs = new HScrollbar(S_HEIGHT_SMALL + S_WIDTH + 4 * MARGIN, height - 3 * MARGIN, 300, 20);
+  tHueMin = new HScrollbar(1920 - camera_width, 10, camera_width, 20, hueMin);
+  tHueMax = new HScrollbar(1920 - camera_width, 40, camera_width, 20, hueMax);
+  tSatMin = new HScrollbar(1920 - camera_width, 350, camera_width, 20, saturationMin);
+  tSatMax = new HScrollbar(1920 - camera_width, 380, camera_width, 20, saturationMax);
+  tBriMin = new HScrollbar(1920 - camera_width, 410, camera_width, 20, brightnessMin);
+  tBriMax = new HScrollbar(1920 - camera_width, 440, camera_width, 20, brightnessMax);
 }
+
 
 void draw() {
   // --- ATTENTION ON Fé LA CAMERA
@@ -108,11 +130,11 @@ void draw() {
     PVector rotation = computeRotation(quads);
     angleX = rotation.x;
     angleZ = rotation.y;
-    
-    if(angleX < -PI/2) angleX += PI;
-    else if(angleX > +PI/2) angleX -= PI;
-    if(angleZ < -PI/2) angleZ += PI;
-    else if(angleZ > PI/2) angleZ -=PI;
+
+    if (angleX < -PI/2) angleX += PI;
+    else if (angleX > +PI/2) angleX -= PI;
+    if (angleZ < -PI/2) angleZ += PI;
+    else if (angleZ > PI/2) angleZ -=PI;
   }
   //jai fini
 
@@ -126,6 +148,29 @@ void draw() {
   // --- Scroll bar ---
   hs.update();
   hs.display();
+
+  // --- Scroll bar ---
+  if (setUpPhase) {
+    tHueMin.update();
+    tHueMin.display();
+    tHueMax.update();
+    tHueMax.display();
+    tSatMin.update();
+    tSatMin.display();
+    tSatMax.update();
+    tSatMax.display();
+    tBriMin.update();
+    tBriMin.display();
+    tBriMax.update();
+    tBriMax.display();
+  }
+  // --- update thresholds ---
+  hueMin = (int) (255 * tHueMin.getPos());
+  hueMax = (int) (255 * tHueMax.getPos());
+  saturationMin = (int) (255 * tSatMin.getPos());
+  saturationMax = (int) (255 * tSatMax.getPos());
+  brightnessMin = (int) (255 * tBriMin.getPos());
+  brightnessMax = (int) (255 * tBriMax.getPos());
 
   // --- Camera & Light settings ---
   //The values for the light have been set arbitrarily

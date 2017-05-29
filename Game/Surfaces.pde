@@ -67,7 +67,7 @@ void displayCamera(List<PVector> quads) {
   } 
   //plotLines(camera, global_lines);
   camera.endDraw();
-  image(camera, 1200, 200);
+  image(camera, 1920 - camera_width, 0);
 }
 
 // --- Drawing Methods ---
