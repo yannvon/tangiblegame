@@ -38,7 +38,7 @@ class Mover {
     pushMatrix();
     translate(location.x, location.y, location.z);
     translate(0, -RADIUS, 0);
-    fill(MOVER_COLOR);
+    fill(255);
     sphere(RADIUS);
     popMatrix();
     BB8HeadAt(new PVector(location.x,location.y,location.z));
