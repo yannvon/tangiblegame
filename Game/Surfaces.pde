@@ -65,6 +65,7 @@ void displayCamera(List<PVector> quads) {
     camera.fill(255, 0, 0);
     camera.ellipse(quad.x, quad.y, 15, 15);
   } 
+  //plotLines(camera, global_lines);
   camera.endDraw();
   image(camera, 1200, 200);
 }

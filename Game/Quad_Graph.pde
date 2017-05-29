@@ -306,7 +306,7 @@ class QuadGraph {
 
     float area = Math.abs(0.5f * (i1 + i2 + i3 + i4));
 
-    //System.out.println(area);
+   // System.out.println(area);
     if (area < max_area && area > min_area)
       return area;
     return 0;
@@ -319,7 +319,8 @@ class QuadGraph {
   boolean nonFlatQuad(PVector c1, PVector c2, PVector c3, PVector c4) {
 
     // cos(70deg) ~= 0.3
-    float min_cos = 0.5f;
+    //MODIFIED , was 0.5
+    float min_cos = 0.8f;
 
     PVector v21= PVector.sub(c1, c2);
     PVector v32= PVector.sub(c2, c3);

@@ -1,3 +1,4 @@
+List<PVector> global_lines;
 List<PVector> findCorners(PImage img) {
   // --- Entire Pipeline Displayed ---
 
@@ -18,13 +19,13 @@ List<PVector> findCorners(PImage img) {
   pipelined = result.copy();
   // 7) Hough transform
   List<PVector> lines = hough(result, nlines, regionRadius);
-  
+  global_lines = lines;
   // 8) Plot lines
   //plotLines(result, lines);
 
   // 9) Compute quad
   QuadGraph quadgraph = new QuadGraph();
-  return quadgraph.findBestQuad(lines, img.width, img.height, img.width*img.height, 500, false);
+  return quadgraph.findBestQuad(lines, img.width, img.height, img.width*img.height, 15000, false);
   
 }
 
