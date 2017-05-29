@@ -1,5 +1,5 @@
 // --- CYLINDER CONSTANTS ---
-final float CYLINDER_BASE_SIZE = 30;
+final float CYLINDER_BASE_SIZE = 20;
 final float CYLINDER_HEIGHT = 30;
 final int CYLINDER_RESOLUTION = 40;
 PShape openCylinder = new PShape();
