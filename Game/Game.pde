@@ -42,7 +42,7 @@ final float PLATE_SIZE_Z = 600;
 final int OBJECT_COLOR = 0xFF008080;
 final int COLOR_RED = 0xFFFF0000;
 final int COLOR_GREEN = 0xFF008000;
-final int PLATE_COLOR  = 0xFF40E0D0;
+final int PLATE_COLOR  = 0x8840E0D0;
 final int GAME_BACKGROUND_COLOR = 240;
 
 // --- VARIABLES ---
@@ -183,6 +183,7 @@ void draw() {
 
   if (!shiftDown) {
     // --- Display control info ---
+    //fill(color(255, 0,0));
     String s = String.format("RotationX: %.5g  RotationZ = %.5g  Speed = %.2g", degrees(angleX), degrees(angleZ), speed/SPEED_START);
     text(s, 10, 20);
 
@@ -190,10 +191,9 @@ void draw() {
     translate(width/2, height/2, 0); 
     rotateX(angleX);
     rotateZ(angleZ);
-    fill(PLATE_COLOR);
-    box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z); 
-
+    
     // --- Updating and drawing the ball ---
+    pushMatrix();
     translate(0, -PLATE_SIZE_Y/2, 0);
     ball.update(angleZ, angleX, obstaclePositions, CYLINDER_BASE_SIZE);
     ball.checkEdges(PLATE_SIZE_X, PLATE_SIZE_Z);
@@ -201,6 +201,11 @@ void draw() {
 
     // --- Drawing obstacles added by user ---
     drawObstacles();
+    popMatrix();
+    
+    
+    fill(PLATE_COLOR);
+    box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z); 
   } else {
     // --- Object adding mode ---  
     //The values for the light have been set arbitrarily here as well
