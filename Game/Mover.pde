@@ -1,5 +1,5 @@
 // --- CONSTANTS ---
-final float GRAVITY_CONSTANT = 0.30;
+final float GRAVITY_CONSTANT = 0.90;
 final float normalForce = 1;
 final float mu = 0.03;
 final float RADIUS = 10;

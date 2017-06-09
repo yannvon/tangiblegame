@@ -30,9 +30,9 @@ Trig t;
 TwoDThreeD twoDThreeD;
 
 // --- Camera ---
-Capture cam;
-final int camera_width = 640;
-final int camera_height = 480;
+Movie cam;
+final int camera_width = 800;
+final int camera_height = 600;
 
 // --- CONSTANTS ---
 final float SPEED_START = 0.045;
@@ -63,39 +63,30 @@ HScrollbar tBriMax;
 boolean setUpPhase = true;
 
 // --- Threshold Variables ---
-int hueMin = 50;
-int hueMax = 143;
-int brightnessMin = 40;
-int brightnessMax = 225;
-int saturationMin = 40;
-int saturationMax = 220;
+int hueMin =53;
+int hueMax = 149;
+int brightnessMin = 55;
+int brightnessMax = 220;
+int saturationMin = 55;
+int saturationMax = 255;
 
 void settings() {
   fullScreen(P3D);
 }
 void setup() {
   bg = loadImage("backgroundSky.jpg");
-  
-  
+
+
   // --- setup camera ---
-  String[] cameras = Capture.list();
-  if (cameras.length == 0) {
-    println("There are no cameras available for capture.");
-    exit();
-  } else {
-    println("Available cameras:");
-    for (int i = 0; i < cameras.length; i++) {
-      println(cameras[i]);
-    }
-    cam = new Capture(this, cameras[0]);
-    cam.start();
-  }
+  cam = new Movie(this, "testvideo.avi"); //Put the video in the same directory
+  cam.loop();
+
 
   // --- image processing ---
   opencv = new OpenCV(this, 100, 100);
   //img = loadImage("board1.jpg");
 
-  twoDThreeD = new TwoDThreeD(camera_width, camera_height, 0);
+  twoDThreeD = new TwoDThreeD(camera_width, camera_height, 15);
   t = new Trig();
 
   /*
@@ -191,7 +182,7 @@ void draw() {
     translate(width/2, height/2, 0); 
     rotateX(angleX);
     rotateZ(angleZ);
-    
+
     // --- Updating and drawing the ball ---
     pushMatrix();
     translate(0, -PLATE_SIZE_Y/2, 0);
@@ -202,10 +193,10 @@ void draw() {
     // --- Drawing obstacles added by user ---
     drawObstacles();
     popMatrix();
-    
-    
+
+
     fill(PLATE_COLOR);
-    box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z); 
+    box(PLATE_SIZE_X, PLATE_SIZE_Y, PLATE_SIZE_Z);
   } else {
     // --- Object adding mode ---  
     //The values for the light have been set arbitrarily here as well

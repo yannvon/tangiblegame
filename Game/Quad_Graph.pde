@@ -306,7 +306,7 @@ class QuadGraph {
 
     float area = Math.abs(0.5f * (i1 + i2 + i3 + i4));
 
-   // System.out.println(area);
+    //System.out.println(area);
     if (area < max_area && area > min_area)
       return area;
     return 0;
@@ -320,7 +320,7 @@ class QuadGraph {
 
     // cos(70deg) ~= 0.3
     //MODIFIED , was 0.5
-    float min_cos = 0.8f;
+    float min_cos = 0.5f;
 
     PVector v21= PVector.sub(c1, c2);
     PVector v32= PVector.sub(c2, c3);
@@ -331,7 +331,7 @@ class QuadGraph {
     float cos2=Math.abs(v32.dot(v43) / (v32.mag() * v43.mag()));
     float cos3=Math.abs(v43.dot(v14) / (v43.mag() * v14.mag()));
     float cos4=Math.abs(v14.dot(v21) / (v14.mag() * v21.mag()));
-
+  
     if (cos1 < min_cos && cos2 < min_cos && cos3 < min_cos && cos4 < min_cos)
       return true;
     else {

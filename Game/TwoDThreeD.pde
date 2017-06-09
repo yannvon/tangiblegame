@@ -76,7 +76,7 @@ class TwoDThreeD {
     this.sampleRate=sampleRate;
     if (sampleRate>0) {
       cutOffFreq=sampleRate/2;
-      alpha= (1/sampleRate)/(1/sampleRate + 1/cutOffFreq);
+      alpha= (1.0/sampleRate)/(1.0/sampleRate + 1.0/cutOffFreq);
     }
   }
 
@@ -99,7 +99,7 @@ class TwoDThreeD {
 
     if (sampleRate>0)
       filter(rotationMatrix, false);
-      
+
     // 3 - Computes and returns Euler angles (rx, ry, rz) from this matrix
     return rotationFromMatrix(rotationMatrix);
   }

@@ -25,7 +25,7 @@ List<PVector> findCorners(PImage img) {
 
   // 9) Compute quad
   QuadGraph quadgraph = new QuadGraph();
-  return quadgraph.findBestQuad(lines, img.width, img.height, img.width*img.height, 15000, false);
+  return quadgraph.findBestQuad(lines, img.width, img.height, img.width*img.height, 0, false);
   
 }
 
