@@ -14,41 +14,41 @@ void loadDroidShapes() {
 }
 
 void BB8HeadAt(PVector position){
-  pushMatrix();
-  translate(position.x, -2*RADIUS+1, position.z);
-  rotateX(PI);
-  rotateY(3*PI/2);
-  scale(6);
-  shape(BB8Head);
-  popMatrix();
+  game.pushMatrix();
+  game.translate(position.x, -2*RADIUS+1, position.z);
+  game.rotateX(PI);
+  game.rotateY(3*PI/2);
+  game.scale(6);
+  game.shape(BB8Head);
+  game.popMatrix();
 }
 
 void R2D2RedAt(PVector position){
-  pushMatrix();
-  translate(position.x, 0, position.z);
-  rotateX(PI);
-  rotateY(3*PI/2);
-  scale(R2D2Scale);
-  shape(R2D2Red);
-  popMatrix();
+  game.pushMatrix();
+  game.translate(position.x, 0, position.z);
+  game.rotateX(PI);
+  game.rotateY(3*PI/2);
+  game.scale(R2D2Scale);
+  game.shape(R2D2Red);
+  game.popMatrix();
 }
 
 void R2D2GreenAt(PVector position){
-  pushMatrix();
-  translate(position.x, 0, position.z);
-  rotateX(PI);
-  rotateY(3*PI/2);
-  scale(R2D2Scale);
-  shape(R2D2Green);
-  popMatrix();
+  game.pushMatrix();
+  game.translate(position.x, 0, position.z);
+  game.rotateX(PI);
+  game.rotateY(3*PI/2);
+  game.scale(R2D2Scale);
+  game.shape(R2D2Green);
+  game.popMatrix();
 }
 
 void R2D2WhiteAt(PVector position){
-  pushMatrix();
-  translate(position.x, 0, position.z);
-  rotateX(PI);
-  rotateY(3*PI/2);
-  scale(R2D2Scale);
-  shape(R2D2White);
-  popMatrix();
+  game.pushMatrix();
+  game.translate(position.x, 0, position.z);
+  game.rotateX(PI);
+  game.rotateY(3*PI/2);
+  game.scale(R2D2Scale);
+  game.shape(R2D2White);
+  game.popMatrix();
 }

@@ -60,14 +60,18 @@ void setupSurfaces() {
 // --- display camera ---
 void displayCamera(List<PVector> quads) {
   camera.beginDraw();
-  camera.image(pipelined, 0, 0);
+  if(quads == null || imgproc.img == null)
+    return;
+  camera.image(imgproc.img, 0, 0);
+  
   for (PVector quad : quads) {
     camera.fill(255, 0, 0);
     camera.ellipse(quad.x, quad.y, 15, 15);
-  } 
-  //plotLines(camera, global_lines);
+  }
+  
   camera.endDraw();
-  image(camera, 1920 - camera_width, 0);
+  
+  image(camera, width - camera_width * resizeFactor, 0, camera_width * resizeFactor, camera_height * resizeFactor);
 }
 
 // --- Drawing Methods ---

@@ -35,12 +35,13 @@ class Mover {
   }
 
   void display() {
-    pushMatrix();
-    translate(location.x, location.y, location.z);
-    translate(0, -RADIUS, 0);
-    fill(255);
-    sphere(RADIUS);
-    popMatrix();
+    game.pushMatrix();
+    game.translate(location.x, location.y, location.z);
+    game.translate(0, -RADIUS, 0);
+    game.fill(255);
+    game.noStroke();
+    game.sphere(RADIUS);
+    game.popMatrix();
     BB8HeadAt(new PVector(location.x,location.y,location.z));
   }
 

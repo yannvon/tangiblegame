@@ -7,7 +7,7 @@ final float MAX_ANGLE = PI/3;
 
 void mouseDragged() 
 {
-  if (!hs.locked && !tSatMin.locked && !tSatMax.locked && !tBriMin.locked && !tBriMax.locked && !tHueMin.locked && !tHueMax.locked) {
+  if (!hs.locked) {
     if (mouseY > pmouseY) {
       angleX -= speed;
       angleX = Math.max(angleX, -MAX_ANGLE);
@@ -37,7 +37,6 @@ void mouseWheel(MouseEvent event) {
 void keyPressed() {
   if (keyCode == SHIFT) {
     shiftDown = true;
-    setUpPhase = false;
   } else if(keyCode == CONTROL){
     angleX = 0;
     angleZ = 0;
