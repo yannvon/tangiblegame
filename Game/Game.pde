@@ -8,6 +8,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import gab.opencv.*;
 OpenCV opencv;
 
+// --- Camera or Grading video ---
+// --- CHANGE THE ABSOLUTE PATH HERE ---
+boolean grading = true;
+String videoPath = "C:\\Users\\Yann\\Google Drive\\EPFL_Semestre4\\Introduction à l'informatique visuelle\\css211_game\\Game\\data\\testvideo.avi";
 
 // --- Constants ---
 final float discretizationStepsPhi = 0.06f;
@@ -27,8 +31,8 @@ Trig t;
 TwoDThreeD twoDThreeD;
 
 // --- Camera ---
-final int camera_width = 800;
-final int camera_height = 600;
+final int camera_width = grading? 800 : 600;
+final int camera_height = grading? 600 : 480;
 
 // --- CONSTANTS ---
 final float SPEED_START = 0.045;
@@ -93,7 +97,7 @@ void setup() {
 
 
 void draw() {
-  //FIXME debug
+  // --- Most Game Elements ---
   drawGameSurface();
   displayGameSurface();
 
@@ -102,12 +106,9 @@ void draw() {
   displayScoreBoardSurfaces();
   displayCamera(imgproc.quads);
   
-  
-  
   // --- Scroll bar ---
   hs.update();
   hs.display();
-
 }
 
 void drawGameSurface() {

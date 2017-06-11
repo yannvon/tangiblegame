@@ -1,24 +1,47 @@
 import processing.video.*;
 
 class ImageProcessing extends PApplet {
-  Movie cam;
+  Movie mov;
+  Capture cam;
   PImage img = new PImage();
   List<PVector> quads;
 
   void settings() {
-    size(200, 300);
   }
   void setup() {
-    background(0);
-    // --- setup camera ---
-    cam = new Movie(this, "C:\\Users\\Yann\\Google Drive\\EPFL_Semestre4\\Introduction à l'informatique visuelle\\css211_game\\Game\\data\\testvideo.avi"); //Put the video in the same directory
-    cam.loop();
+    // --- chose between cam or video ---
+    if (grading) {
+      mov = new Movie(this, videoPath); //Put the video in the same directory
+      mov.loop();
+    } else {
+      String[] cameras = Capture.list();
+      if (cameras.length == 0) {
+        println("There are no cameras available for capture.");
+        exit();
+      } else {
+        println("Available cameras:");
+        for (int i = 0; i < cameras.length; i++) {
+          println(cameras[i]);
+        }
+        cam = new Capture(this, cameras[0]);
+        cam.start();
+      }
+    }
   }
   void draw() {
+    if (grading) {
+      if (mov.available() == true) {
+        mov.read();
+      }
+      img = mov.get();
+    } else {
     if (cam.available() == true) {
-      cam.read();
+        cam.read();
+      }
+      img = cam.get();
     }
-    img = cam.get();
+    
+    
     quads = findCorners(img);
     if (quads.size() == 4) {
       PVector rotation = computeRotation(quads);
