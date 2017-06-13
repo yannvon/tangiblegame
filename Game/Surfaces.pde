@@ -25,6 +25,9 @@ PGraphics ball_trace;
 // --- SCOREBOARD surfaces ---
 PGraphics scoreboard;
 
+// --- SCROLLBAR surface --- 
+PGraphics hsc;
+
 // --- BAR CHART surface ---
 PGraphics barChart;
 
@@ -55,6 +58,7 @@ void setupSurfaces() {
   ball_trace = createGraphics(S_HEIGHT_SMALL, S_HEIGHT_SMALL, P2D);
   scoreboard = createGraphics(S_WIDTH, S_HEIGHT_SMALL, P2D);
   barChart = createGraphics(width - S_HEIGHT_SMALL - S_WIDTH - 5 * MARGIN, S_HEIGHT_SMALL - 3 * MARGIN, P2D);
+  hsc = createGraphics(width, height, P2D);
 }
 
 // --- display camera ---
@@ -160,4 +164,5 @@ void displayScoreBoardSurfaces() {
   image(objects, MARGIN, yCordinate);
   image(scoreboard, S_HEIGHT_SMALL + 2 * MARGIN, yCordinate);
   image(barChart, S_HEIGHT_SMALL + S_WIDTH + 4 * MARGIN, yCordinate);
+  image(hsc,0,0);
 }

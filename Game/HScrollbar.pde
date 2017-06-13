@@ -108,16 +108,19 @@ class HScrollbar {
    * @brief Draws the scrollbar in its current state
    */
   void display() {
-    noStroke();
-    fill(204);
-    rect(xPosition, yPosition, barWidth, barHeight);
+    //Draw it on a specific PGraphics to avoid flickering
+    hsc.beginDraw();
+    hsc.noStroke();
+    hsc.fill(204);
+    hsc.rect(xPosition, yPosition, barWidth, barHeight);
     if (mouseOver || locked) {
-      fill(0, 0, 0);
+      hsc.fill(0, 0, 0);
     } else {
-      fill(102, 102, 102);
+      hsc.fill(102, 102, 102);
     }
-    rect(sliderPosition, yPosition, barHeight, barHeight);
-  }
+    hsc.rect(sliderPosition, yPosition, barHeight, barHeight);
+    hsc.endDraw();  
+}
 
   /**
    * @brief Gets the slider position
