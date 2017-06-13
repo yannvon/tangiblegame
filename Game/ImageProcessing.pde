@@ -3,6 +3,7 @@ import processing.video.*;
 class ImageProcessing extends PApplet {
   Movie mov;
   Capture cam;
+  PImage tmpImg;
   PImage img = new PImage();
   List<PVector> quads;
 
@@ -33,16 +34,17 @@ class ImageProcessing extends PApplet {
       if (mov.available() == true) {
         mov.read();
       }
-      img = mov.get();
+      tmpImg = mov.get();
     } else {
     if (cam.available() == true) {
         cam.read();
       }
-      img = cam.get();
+      tmpImg = cam.get();
     }
     
     
-    quads = findCorners(img);
+    quads = findCorners(tmpImg);
+    img = tmpImg;
     if (quads.size() == 4) {
       PVector rotation = computeRotation(quads);
       angleX = rotation.x;
