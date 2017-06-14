@@ -11,14 +11,14 @@ OpenCV opencv;
 // --- Camera or Grading video ---
 // --- CHANGE THE ABSOLUTE PATH HERE ---
 boolean grading = true;
-String videoPath = "C:\\Users\\benno\\Downloads\\testvideo.avi";
+String videoPath = "C:\\Users\\Yann\\Google Drive\\EPFL_Semestre4\\Introduction à l'informatique visuelle\\css211_game\\Game\\data\\testvideo.avi";
 
 // --- Constants ---
 final float discretizationStepsPhi = 0.06f;
 final float discretizationStepsR = 2.5f;
 final int minVotes = 100;
 final int nlines = 5;
-final int regionRadius = 10;
+final int regionRadius = 14;
 final float resizeFactor = 0.7;
 
 // --- Variables ---
@@ -84,6 +84,7 @@ void setup() {
   loadDroidShapes();
   setupSurfaces();
   game = createGraphics(width, height, P3D);
+  
   //Create new mover and scrollbar
   ball = new Mover(new PVector(0, 0, 0));
   hs = new HScrollbar(S_HEIGHT_SMALL + S_WIDTH + 4 * MARGIN, height - 3 * MARGIN, 300, 20);
@@ -109,7 +110,6 @@ void draw() {
   drawScoreBoardSurfaces();
   displayScoreBoardSurfaces();
   displayCamera(imgproc.quads);
-  
 }
 
 void drawGameSurface() {

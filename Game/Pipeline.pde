@@ -1,6 +1,5 @@
 List<PVector> global_lines;
 List<PVector> findCorners(PImage img) {
-  int milis = millis();
   
   // --- Entire Pipeline Displayed ---
 
@@ -10,7 +9,6 @@ List<PVector> findCorners(PImage img) {
   // 3) Blob Detection
   result = findConnectedComponents(result, true);
   
-  
   // 4) Blurring (assumes grayscale)
   result = convolute(result);
 
@@ -19,7 +17,6 @@ List<PVector> findCorners(PImage img) {
 
   // 6) Low brightness supression
   result = thresholdBrightness(result, 100);
-
   
   // 7) Hough transform
   List<PVector> lines = hough(result, nlines, regionRadius);
@@ -30,7 +27,7 @@ List<PVector> findCorners(PImage img) {
   // 9) Compute quad
   QuadGraph quadgraph = new QuadGraph();
   
-  return quadgraph.findBestQuad(lines, img.width, img.height, img.width*img.height, 0, false);
+  return quadgraph.findBestQuad(lines, img.width, img.height, img.width * img.height, 5000, false);
   
 }
 

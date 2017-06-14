@@ -9,6 +9,7 @@ class ImageProcessing extends PApplet {
 
   void settings() {
   }
+  
   void setup() {
     // --- chose between cam or video ---
     if (grading) {
@@ -41,7 +42,6 @@ class ImageProcessing extends PApplet {
       }
       tmpImg = cam.get();
     }
-    
     
     quads = findCorners(tmpImg);
     img = tmpImg;
