@@ -101,15 +101,15 @@ void draw() {
   drawGameSurface();
   displayGameSurface();
 
-  // --- Scroll bar ---
-  hs.update();
-  //display actually draws it on a PGraphics
-  hs.display();
-
  // --- Scoreboard Surfaces ---
   drawScoreBoardSurfaces();
   displayScoreBoardSurfaces();
   displayCamera(imgproc.quads);
+  
+  // --- Scroll bar ---
+  hs.update();
+  //display actually draws it on a PGraphics
+  hs.display();
 }
 
 void drawGameSurface() {

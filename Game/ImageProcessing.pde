@@ -13,7 +13,7 @@ class ImageProcessing extends PApplet {
   void setup() {
     // --- chose between cam or video ---
     if (grading) {
-      mov = new Movie(this, videoPath); //Put the video in the same directory
+      mov = new Movie(this, videoPath);
       mov.loop();
     } else {
       String[] cameras = Capture.list();
