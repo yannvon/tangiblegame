@@ -11,6 +11,8 @@ int S_HEIGHT_LARGE;
 int S_HEIGHT_SMALL;
 int MARGIN;
 int S_WIDTH;
+// --- CAMERA SURFACE ---
+PGraphics camera;
 
 // --- BACKGROUND SURFACE ---
 PGraphics data_background;
@@ -22,6 +24,9 @@ PGraphics ball_trace;
 
 // --- SCOREBOARD surfaces ---
 PGraphics scoreboard;
+
+// --- SCROLLBAR surface --- 
+PGraphics hsc;
 
 // --- BAR CHART surface ---
 PGraphics barChart;
@@ -46,12 +51,31 @@ void setupSurfaces() {
   S_WIDTH = width/12;
 
   // --- Create Graphics for Surfaces ---
+  camera = createGraphics(camera_width, camera_height, P2D);
   data_background = createGraphics(width, S_HEIGHT_LARGE, P2D);
   top_view = createGraphics(S_HEIGHT_SMALL, S_HEIGHT_SMALL, P2D);
   objects = createGraphics(S_HEIGHT_SMALL, S_HEIGHT_SMALL, P2D);
   ball_trace = createGraphics(S_HEIGHT_SMALL, S_HEIGHT_SMALL, P2D);
   scoreboard = createGraphics(S_WIDTH, S_HEIGHT_SMALL, P2D);
   barChart = createGraphics(width - S_HEIGHT_SMALL - S_WIDTH - 5 * MARGIN, S_HEIGHT_SMALL - 3 * MARGIN, P2D);
+  hsc = createGraphics(width, height, P2D);
+}
+
+// --- display camera ---
+void displayCamera(List<PVector> quads) {
+  camera.beginDraw();
+  if(quads == null || imgproc.img == null)
+    return;
+  camera.image(imgproc.img, 0, 0);
+  
+  for (PVector quad : quads) {
+    camera.fill(255, 0, 0);
+    camera.ellipse(quad.x, quad.y, 15, 15);
+  }
+  
+  camera.endDraw();
+  
+  image(camera, width - camera_width * resizeFactor, 0, camera_width * resizeFactor, camera_height * resizeFactor);
 }
 
 // --- Drawing Methods ---
@@ -92,8 +116,8 @@ void drawScoreBoardSurfaces() {
   scoreboard.stroke(SCOREBOARD_STROKE_COLOR);
   scoreboard.strokeWeight(2);
   scoreboard.fill(DATA_BACKGROUND_COLOR);
-  scoreboard.rect(SCOREBOARD_STROKE_WEIGHT/2 , SCOREBOARD_STROKE_WEIGHT/2, 
-      scoreboard.width - SCOREBOARD_STROKE_WEIGHT, scoreboard.height - SCOREBOARD_STROKE_WEIGHT);
+  scoreboard.rect(SCOREBOARD_STROKE_WEIGHT/2, SCOREBOARD_STROKE_WEIGHT/2, 
+    scoreboard.width - SCOREBOARD_STROKE_WEIGHT, scoreboard.height - SCOREBOARD_STROKE_WEIGHT);
   scoreboard.noStroke();
   String s = String.format(
     "Your score\n %.3f\n\n" +
@@ -115,7 +139,7 @@ void drawScoreBoardSurfaces() {
     // Note : In order to add a border we draw a rectangle with a border, instead of setting the background.
     barChart.stroke(BARCHART_STROKE_COLOR);
     barChart.fill(DATA_BACKGROUND_COLOR_LIGHT);
-    barChart.rect(0 , 0, barChart.width - 1, barChart.height - 1);
+    barChart.rect(0, 0, barChart.width - 1, barChart.height - 1);
     barChart.noStroke();
     float xPos = 0;
     float scale_factor = Math.max(newPos*2, 0.3);
@@ -140,4 +164,5 @@ void displayScoreBoardSurfaces() {
   image(objects, MARGIN, yCordinate);
   image(scoreboard, S_HEIGHT_SMALL + 2 * MARGIN, yCordinate);
   image(barChart, S_HEIGHT_SMALL + S_WIDTH + 4 * MARGIN, yCordinate);
+  image(hsc,0,0);
 }

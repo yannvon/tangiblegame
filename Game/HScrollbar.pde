@@ -10,6 +10,29 @@ class HScrollbar {
   boolean mouseOver;  //Is the mouse over the slider?
   boolean locked;     //Is the mouse clicking and dragging the slider now?
 
+
+  /**
+   * @brief Creates a new horizontal scrollbar
+   * 
+   * @param x The x position of the top left corner of the bar in pixels
+   * @param y The y position of the top left corner of the bar in pixels
+   * @param w The width of the bar in pixels
+   * @param h The height of the bar in pixels
+   */
+  HScrollbar (float x, float y, float w, float h, int sliderP) {
+    barWidth = w;
+    barHeight = h;
+    xPosition = x;
+    yPosition = y;
+
+    sliderPosition = xPosition + (barWidth * sliderP / 255.0)  - barHeight/2;
+    newSliderPosition = sliderPosition;
+
+    sliderPositionMin = xPosition;
+    sliderPositionMax = xPosition + barWidth - barHeight;
+  }
+  
+  
   /**
    * @brief Creates a new horizontal scrollbar
    * 
@@ -85,16 +108,19 @@ class HScrollbar {
    * @brief Draws the scrollbar in its current state
    */
   void display() {
-    noStroke();
-    fill(204);
-    rect(xPosition, yPosition, barWidth, barHeight);
+    //Draw it on a specific PGraphics to avoid flickering
+    hsc.beginDraw();
+    hsc.noStroke();
+    hsc.fill(204);
+    hsc.rect(xPosition, yPosition, barWidth, barHeight);
     if (mouseOver || locked) {
-      fill(0, 0, 0);
+      hsc.fill(0, 0, 0);
     } else {
-      fill(102, 102, 102);
+      hsc.fill(102, 102, 102);
     }
-    rect(sliderPosition, yPosition, barHeight, barHeight);
-  }
+    hsc.rect(sliderPosition, yPosition, barHeight, barHeight);
+    hsc.endDraw();  
+}
 
   /**
    * @brief Gets the slider position

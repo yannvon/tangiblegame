@@ -1,8 +1,8 @@
 // --- CONSTANTS ---
-final float GRAVITY_CONSTANT = 0.15;
+final float GRAVITY_CONSTANT = 0.90;
 final float normalForce = 1;
 final float mu = 0.03;
-final float RADIUS = 20;
+final float RADIUS = 10;
 final float BOUNCING_FACTOR = 0.95;
 final int MOVER_COLOR = 0xFF778899;
 
@@ -35,12 +35,14 @@ class Mover {
   }
 
   void display() {
-    pushMatrix();
-    translate(location.x, location.y, location.z);
-    translate(0, -RADIUS, 0);
-    fill(MOVER_COLOR);
-    sphere(RADIUS);
-    popMatrix();
+    game.pushMatrix();
+    game.translate(location.x, location.y, location.z);
+    game.translate(0, -RADIUS, 0);
+    game.fill(255);
+    game.noStroke();
+    game.sphere(RADIUS);
+    game.popMatrix();
+    BB8HeadAt(new PVector(location.x,location.y,location.z));
   }
 
   void checkEdges(float boundary_x, float boundary_z) {
@@ -85,8 +87,13 @@ class Mover {
         V2.add(normal);
         velocity = V2.mult(BOUNCING_FACTOR);
         
+        //--- remove object form list ---
+        obstaclePositions.remove(obstacle);
+        
         // --- Adapt Score ---
         changeScore(true);
+        
+        return;
       }
     }
   }

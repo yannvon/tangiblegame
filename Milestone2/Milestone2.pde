@@ -4,6 +4,11 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.concurrent.ThreadLocalRandom;
 
+// --- OpenCV Imports ---
+import gab.opencv.*;
+OpenCV opencv;
+
+
 // --- Constants ---
 final float discretizationStepsPhi = 0.06f;
 final float discretizationStepsR = 2.5f;
@@ -23,6 +28,7 @@ void settings() {
 }
 
 void setup() {
+  opencv = new OpenCV(this, 100, 100);
   img = loadImage("board1.jpg");
   t = new Trig();
   noLoop();
@@ -73,4 +79,15 @@ void draw() {
   image(blob, img.width, (img.height - blob.height) / 2);
   threshBright.resize((int)(img.width * resizeFactor), (int)(img.height * resizeFactor));
   image(threshBright, img.width + blob.width, (img.height - threshBright.height) / 2);
+  TwoDThreeD twoDThreeD = new TwoDThreeD(img.width, img.height, 0);
+  List<PVector> pointsHomogeneous = new ArrayList<PVector>();
+  for(PVector point : quads){
+    pointsHomogeneous.add(new PVector(point.x, point.y, 1)); 
+  }
+  PVector rotation = twoDThreeD.get3DRotations(pointsHomogeneous);
+  println("r_x = "+radToDeg(rotation.x)+"°, r_y = "+radToDeg(rotation.y)+"°, r_z = "+radToDeg(rotation.z)+"°");
+}
+
+float radToDeg(float angle){
+  return angle * 180 / PI;
 }
